@@ -13,10 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\GameCore">
+      <UniqueIdentifier>{d8796873-47b6-4503-b605-48a8b792181d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity">
+      <UniqueIdentifier>{7be2568a-4922-450e-a9d9-3be27eee3af7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CrossingRoad.cpp">
+    <ClCompile Include="Resource\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Resource\GameCore.cpp">
+      <Filter>Source Files\GameCore</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Entity\Entity.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource\GameCore.h">
+      <Filter>Source Files\GameCore</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Entity\Entity.h">
+      <Filter>Source Files\Entity</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Entity">
       <UniqueIdentifier>{7be2568a-4922-450e-a9d9-3be27eee3af7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Graphic">
+      <UniqueIdentifier>{2e0c1652-6059-44d2-b37a-9fadc162405c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Resource\main.cpp">
@@ -30,6 +33,9 @@
     <ClCompile Include="Resource\Entity\Entity.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="Resource\Graphic\Graphic.cpp">
+      <Filter>Source Files\Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource\GameCore.h">
@@ -37,6 +43,9 @@
     </ClInclude>
     <ClInclude Include="Resource\Entity\Entity.h">
       <Filter>Source Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Graphic\Graphic.h">
+      <Filter>Source Files\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,19 +2,22 @@
 #define GAMECORE_H_INCLUDED
 
 #include <iostream>
-#include "Entity/Entity.h"
 #include <vector>
+#include "Graphic/Graphic.h"
+#include "Entity/Entity.h"
 
 using namespace std;
 
 class GameCore {
 private:
 	vector<Entity*> entities;
+	Graphic graphic;
+
 public:
 	GameCore();
 	~GameCore();
 
-	void drawGame();
+	void drawGame(); //Using graphic
 
 	/*
 	void resetGame(); 

@@ -26,7 +26,7 @@ public:
 	//Functions
 	Position Move(Position pos);
 	
-	virtual void Tell();
+	//virtual void Tell();
 };
 
 #endif // ENTITY_H_INCLUDED

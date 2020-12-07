@@ -2,10 +2,15 @@
 #define GAMECORE_H_INCLUDED
 #include "chrono"
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include "Graphic/Graphic.h"
 #include "Entity/Entity.h"
+#include <conio.h>
 #include <thread>
+
+#define ANIMATION_SETTING "./Resource/Animation/setting.txt"
+
 using namespace std;
 
 class GameCore {
@@ -18,6 +23,11 @@ public:
 	~GameCore() {};
 
 	void drawGame(); //Using graphic
+	void GameBehavior();
+	void UserInput();
+	
+
+	friend class Graphic;
 	/*
 	void resetGame(); 
 	void exitGame(HANDLE);

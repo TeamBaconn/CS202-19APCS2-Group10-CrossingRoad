@@ -114,6 +114,6 @@ class Player : public Entity {
 public:
 	Player();
 	Player(Position pos, Animator* animator);
-	void Behavior(int rate);
+	void Behavior(int rate,const Level&level);
 };
 #endif // ENTITY_H_INCLUDED

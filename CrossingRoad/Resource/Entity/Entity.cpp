@@ -52,7 +52,8 @@ Player::Player() : Entity() {}
 
 Player::Player(Position pos, Animator* animator) : Entity(pos, animator) {}
 
-void Player::Behavior(int rate) {
+void Player::Behavior(int rate,const Level& lvl) {
 	Entity::Behavior(rate);
+	
 	//if (pos.x - width / 2 > maxwidth) pos.x = -width / 2;
 }

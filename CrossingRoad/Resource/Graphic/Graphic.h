@@ -17,7 +17,7 @@ public:
 	~Graphic() {};
 	
 	vector<Entity*> sort(vector<Entity*> values);
-	char** getDrawableMap(const Level& level);
+	char** getDrawableMap(const Level& level, const GameState& state);
 };
 void GotoXY(int x, int y);
 #endif // GRAPHIC_H_INCLUDED

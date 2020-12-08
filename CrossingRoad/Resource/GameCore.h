@@ -1,5 +1,6 @@
 #ifndef GAMECORE_H_INCLUDED
 #define GAMECORE_H_INCLUDED
+
 #include "chrono"
 #include <iostream>
 #include <fstream>
@@ -14,6 +15,7 @@ using namespace std;
 
 class GameCore {
 private:
+	GameState state;
 	Graphic graphic;
 	Level level;
 public:

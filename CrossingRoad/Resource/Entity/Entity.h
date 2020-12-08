@@ -6,7 +6,7 @@
 
 #define HUMAN_ID 0
 #define CAR_ID 1
-#define DINO 2
+#define MENU_ID 2
 
 using namespace std;
 

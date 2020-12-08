@@ -23,6 +23,9 @@
 #include "Entity/Entity.h"
 #include <random>
 
+
+enum class GameState { MENU, PAUSE, PLAYING };
+
 class Level {
 private:
 	vector<Animator*> anim_list;
@@ -92,7 +95,7 @@ public:
 	const Entity* getPlayer() const{
 		return player;
 	}
-	vector<Animator*> getAnimation(int type) {
+	vector<Animator*> getAnimation(int type) const{
 		vector<Animator*> list;
 		for (int i = 0; i < anim_list.size(); i++)
 			if (anim_list[i]->id == type) list.emplace_back(anim_list[i]);

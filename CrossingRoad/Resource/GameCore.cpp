@@ -6,8 +6,9 @@ inline bool instanceof(const T*) {
 }
 
 GameCore::GameCore() {
+	this->state = GameState::MENU;
 	//Load du lieu nguoi choi
-	level = Level(10,1);
+	//level = Level(10,1);
 }
 void resizeConsole(int width, int height)
 {
@@ -32,21 +33,23 @@ void HideCursor()
 }
 void GameCore::GameBehavior() {
 	while (1) {
+		if (state != GameState::PLAYING) continue;
 		Sleep(GAME_RATE);
 		for(int i = 0; i < level.getEntities().size(); i++) 
 			level.getEntities()[i]->Behavior(GAME_RATE);
 	}
 }
 void GameCore::UserInput() {
-	Entity* player = level.player;
 	while (1) {
+		Sleep(50);
 		char c = _getch();
-		/*
-		* 75 <-
-		* 80 v
-		* 77 ->
-		* 72 ^
-		*/
+
+		if (state != GameState::PLAYING) {
+			level = Level(10,1);
+			state = GameState::PLAYING;
+			continue;
+		}
+		Entity* player = level.player;
 		switch ((int)c) {
 		case 80:
 			player->Move(Position(0,1));
@@ -65,7 +68,6 @@ void GameCore::UserInput() {
 			player->changeBase(1);
 			break;
 		}
-		Sleep(50);
 	}
 }
 void GameCore::Start() {
@@ -83,7 +85,7 @@ void GameCore::Start() {
 void GameCore::DrawGame() {
 	char** old = nullptr;
 	while (1) {
-		char** map = graphic.getDrawableMap(level);
+		char** map = graphic.getDrawableMap(level,state);
 		for (int i = 0; i < SCREEN_WIDTH; i++) {
 			for (int j = 0; j < SCREEN_HEIGHT; j++) {
 				if (old != nullptr && old[i][j] == map[i][j]) continue;

@@ -59,6 +59,7 @@ public:
 	}
 	Level() = default;
 	Level(int lane, int mode) {
+		//Load resource 
 		cout << "Begin load data" << endl;
 		ifstream info;
 		info.open((string)ANIMATION + "/setting.txt");
@@ -75,6 +76,8 @@ public:
 		this->mode = mode;
 		this->width = LANE_WIDTH;
 		this->height = lane*LANE_HEIGHT;
+
+		//Spawn
 
 		player = new Player
 		(Position(LANE_WIDTH/2,5),getAnimation(HUMAN_ID)[0]);

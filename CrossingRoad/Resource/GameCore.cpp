@@ -68,8 +68,12 @@ void GameCore::UserInput() {
 	}
 }
 void GameCore::drawGame() {
+	//Behavior
 	thread t1(&GameCore::GameBehavior,this);
+	//Nhan input tu user
 	thread t2(&GameCore::UserInput, this);
+
+	//Draw
 	char** old = nullptr;
 	while (1) {
 		char** map = graphic.getDrawableMap(level);

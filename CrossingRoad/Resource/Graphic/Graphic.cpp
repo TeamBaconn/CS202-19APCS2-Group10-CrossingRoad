@@ -49,15 +49,16 @@ char** Graphic::getDrawableMap(const Level& level) {
 
 	Level::deleteMap(ingame, level.getWidth());
 	for (int i = 0; i < entities.size(); i++) {
+		Key key = entities[i]->animator->getKey();
+
 		Position pos(entities[i]->pos.x - entities[i]->animator->getWidth() / 2
-			, entities[i]->pos.y - entities[i]->animator->getKey().key.size());
-		for (int j = 0; j < entities[i]->animator->getKey().key.size(); j++) {
-			for (int k = 0; k < entities[i]->animator->getKey().key[j].length(); k++) {
+			, entities[i]->pos.y - key.key.size());
+		for (int j = 0; j < key.key.size(); j++) {
+			for (int k = 0; k < key.key[j].length(); k++) {
 				//Check its null character ! by default
-				char c = entities[i]->animator->getKey().key[j][k];
+				char c = key.key[j][k];
 
 				drawC(map, pos.x + k-x, pos.y + j-y, c);
-
 			}
 		}
 		//For debug

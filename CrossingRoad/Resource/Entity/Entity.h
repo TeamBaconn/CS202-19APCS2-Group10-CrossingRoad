@@ -6,6 +6,7 @@
 
 #define HUMAN_ID 0
 #define CAR_ID 1
+#define DINO 2
 
 using namespace std;
 
@@ -101,6 +102,7 @@ public:
 	friend class Graphic;
 };
 
+// 1
 class Car : public Entity {
 public:
 	Car(); 

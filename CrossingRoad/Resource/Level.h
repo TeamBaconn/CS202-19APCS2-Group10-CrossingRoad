@@ -32,6 +32,7 @@ private:
 	Entity* player;
 	vector<Entity*> entities;
 	int width, height, mode, lane;
+	bool lost = false;
 	//Lane
 public:
 	void ReplaceAll(string& c, char f, char t) {
@@ -93,7 +94,7 @@ public:
 		}
 	}
 	void LooseGame() {
-		cout << "n";
+		lost = true;
 	}
 	const Entity* getPlayer() const{
 		return player;
@@ -141,6 +142,10 @@ public:
 		return height;
 	}
 	
+	bool isLost() const {
+		return lost;
+	}
+
 	friend class GameCore;
 };
 #endif // LEVEL_H_INCLUDED

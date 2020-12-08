@@ -63,7 +63,7 @@ void Player::Behavior(int rate,Level& lvl) {
 		int secondHalf = lvl.getEntities()[i]->GetPos().x - lvl.getEntities()[i]->getAni()->getWidth() / 2;
 		int botY = lvl.getEntities()[i]->GetPos().y;
 		int topY = lvl.getEntities()[i]->getAni()->getHeight();
-		if (secondHalf < pos.x&&pos.x < firstHalf&&botY<pos.y&&pos.y<botY+topY) {
+		if (secondHalf < pos.x && pos.x < firstHalf && botY<pos.y&&pos.y<botY+topY) {
 			lvl.LooseGame();
 		}
 	}

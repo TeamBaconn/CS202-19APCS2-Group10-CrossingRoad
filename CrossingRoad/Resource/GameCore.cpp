@@ -34,6 +34,9 @@ void HideCursor()
 void GameCore::GameBehavior() {
 	while (1) {
 		if (state != GameState::PLAYING) continue;
+		if (level.isLost()) {
+			state = GameState::MENU;
+		}
 		Sleep(GAME_RATE);
 		for(int i = 0; i < level.getEntities().size(); i++) 
 			level.getEntities()[i]->Behavior(GAME_RATE,level);

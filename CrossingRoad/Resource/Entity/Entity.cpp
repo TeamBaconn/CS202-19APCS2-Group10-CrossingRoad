@@ -45,6 +45,8 @@ Car::Car(Position pos, Animator* animator) : Entity(pos, animator) {}
 void Car::Behavior(int rate) {
 	Entity::Behavior(rate);
 	Move(Position(1, 0));
+	
+	//Cham border
 	if (pos.x - animator->getWidth() / 2 > LANE_WIDTH) pos.x = -animator->getWidth() / 2;
 }
 
@@ -54,5 +56,8 @@ Player::Player(Position pos, Animator* animator) : Entity(pos, animator) {}
 
 void Player::Behavior(int rate) {
 	Entity::Behavior(rate);
+
+	//Check collision
+
 	//if (pos.x - width / 2 > maxwidth) pos.x = -width / 2;
 }

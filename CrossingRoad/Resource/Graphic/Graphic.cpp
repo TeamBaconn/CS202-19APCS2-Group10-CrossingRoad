@@ -62,8 +62,8 @@ char** Graphic::getDrawableMap(const Level& level) {
 			}
 		}
 		//For debug
-		//drawC(map, entities[i]->pos.x -x, entities[i]->pos.y-y, '0' + i);
-		//drawC(map, pos.x-x, pos.y-y, 'X');
+		drawC(map, entities[i]->pos.x-x, entities[i]->pos.y-y, '0' + i);
+		drawC(map, pos.x-x, pos.y-y, 'X');
 	}
 	return map;
 }

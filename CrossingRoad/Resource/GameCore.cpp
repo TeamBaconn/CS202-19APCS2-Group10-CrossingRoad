@@ -6,6 +6,7 @@ inline bool instanceof(const T*) {
 }
 
 GameCore::GameCore() {
+	//Load du lieu nguoi choi
 	level = Level(10,1);
 }
 void resizeConsole(int width, int height)
@@ -67,17 +68,22 @@ void GameCore::UserInput() {
 		Sleep(50);
 	}
 }
-void GameCore::drawGame() {
+void GameCore::Start() {
+	//Draw game
+	thread t3(&GameCore::DrawGame, this);
 	//Behavior
-	thread t1(&GameCore::GameBehavior,this);
+	thread t1(&GameCore::GameBehavior, this);
 	//Nhan input tu user
 	thread t2(&GameCore::UserInput, this);
+	t1.join();
+	t2.join();
+	t3.join();
 
-	//Draw
+}
+void GameCore::DrawGame() {
 	char** old = nullptr;
 	while (1) {
 		char** map = graphic.getDrawableMap(level);
-
 		for (int i = 0; i < SCREEN_WIDTH; i++) {
 			for (int j = 0; j < SCREEN_HEIGHT; j++) {
 				if (old != nullptr && old[i][j] == map[i][j]) continue;
@@ -89,6 +95,4 @@ void GameCore::drawGame() {
 		Level::deleteMap(old, SCREEN_WIDTH);
 		old = map;
 	}
-	t1.join();
-	t2.join();
 }

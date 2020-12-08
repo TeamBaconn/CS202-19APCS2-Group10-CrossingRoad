@@ -20,10 +20,11 @@ public:
 	GameCore();
 	~GameCore() {};
 
-	void drawGame(); //Using graphic
+	void DrawGame(); //Using graphic
 	void GameBehavior();
 	void UserInput();
 	
+	void Start();
 
 	friend class Graphic;
 	/*

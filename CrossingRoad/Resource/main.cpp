@@ -8,6 +8,6 @@ int main() {
 	HideCursor();
 
 	GameCore gc;
-	gc.drawGame();
+	gc.Start();
 	return 0;
 }

@@ -78,9 +78,10 @@ public:
 		this->height = lane*LANE_HEIGHT;
 
 		//Spawn
-
 		player = new Player
 		(Position(LANE_WIDTH/2,5),getAnimation(HUMAN_ID)[0]);
+
+		//Thread rieng de spawn quai vat
 		entities.push_back(player);
 		for (int i = 0; i < lane; i++) {
 			vector<Animator*> anim = getAnimation(CAR_ID);

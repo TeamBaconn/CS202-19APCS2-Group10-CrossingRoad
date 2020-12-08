@@ -36,7 +36,7 @@ void GameCore::GameBehavior() {
 		if (state != GameState::PLAYING) continue;
 		Sleep(GAME_RATE);
 		for(int i = 0; i < level.getEntities().size(); i++) 
-			level.getEntities()[i]->Behavior(GAME_RATE);
+			level.getEntities()[i]->Behavior(GAME_RATE,level);
 	}
 }
 void GameCore::UserInput() {

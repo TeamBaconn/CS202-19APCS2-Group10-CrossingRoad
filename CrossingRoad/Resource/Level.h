@@ -92,6 +92,9 @@ public:
 			(Position(0, i*LANE_HEIGHT+LANE_HEIGHT/2), anim[rand() % anim.size()]));
 		}
 	}
+	void LooseGame() {
+		cout << "n";
+	}
 	const Entity* getPlayer() const{
 		return player;
 	}
@@ -137,6 +140,7 @@ public:
 	int getHeight() const {
 		return height;
 	}
+	
 	friend class GameCore;
 };
 #endif // LEVEL_H_INCLUDED

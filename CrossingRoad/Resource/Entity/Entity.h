@@ -62,6 +62,9 @@ public:
 	int getWidth() {
 		return width;
 	}
+	int getHeight() {
+		return getKey().key.size();
+	}
 	~Animator() = default;
 	friend class Level;
 };
@@ -91,15 +94,21 @@ public:
 	//Functions
 	Position Move(Position pos);
 	
-	virtual void Behavior(int rate) {
+	virtual void Behavior(int rate, Level&level) {
 		animator->push(rate);
 	}
 
 	void changeBase(int id) {
 		animator->changeAnimation(id);
 	}
-
+	Position GetPos() {
+		return pos;
+	}
+	Animator* getAni() {
+		return animator;
+	}
 	friend class Graphic;
+	
 };
 
 // 1
@@ -107,13 +116,13 @@ class Car : public Entity {
 public:
 	Car(); 
 	Car(Position pos, Animator* animator);
-	void Behavior(int rate);
+	void Behavior(int rate,  Level& level);
 };
 
 class Player : public Entity {
 public:
 	Player();
 	Player(Position pos, Animator* animator);
-	void Behavior(int rate);
+	void Behavior(int rate, Level&level);
 };
 #endif // ENTITY_H_INCLUDED

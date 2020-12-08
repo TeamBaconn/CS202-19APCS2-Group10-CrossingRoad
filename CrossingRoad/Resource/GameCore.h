@@ -23,7 +23,6 @@ public:
 	void drawGame(); //Using graphic
 	void GameBehavior();
 	void UserInput();
-	
 
 	friend class Graphic;
 	/*

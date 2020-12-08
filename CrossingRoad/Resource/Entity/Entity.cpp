@@ -42,8 +42,8 @@ Car::Car() : Entity() {}
 
 Car::Car(Position pos, Animator* animator) : Entity(pos, animator) {}
 
-void Car::Behavior(int rate) {
-	Entity::Behavior(rate);
+void Car::Behavior(int rate,Level&level) {
+	Entity::Behavior(rate,level);
 	Move(Position(1, 0));
 	if (pos.x - animator->getWidth() / 2 > LANE_WIDTH) pos.x = -animator->getWidth() / 2;
 }
@@ -52,8 +52,17 @@ Player::Player() : Entity() {}
 
 Player::Player(Position pos, Animator* animator) : Entity(pos, animator) {}
 
-void Player::Behavior(int rate,const Level& lvl) {
-	Entity::Behavior(rate);
-	
+void Player::Behavior(int rate,Level& lvl) {
+	Entity::Behavior(rate,lvl);
+	for (int i = 0; i < lvl.getEntities().size(); i++) {
+		if (lvl.getEntities()[i] == this) continue;
+		int firstHalf = lvl.getEntities()[i]->GetPos().x + lvl.getEntities()[i]->getAni()->getWidth() / 2;
+		int secondHalf = lvl.getEntities()[i]->GetPos().x - lvl.getEntities()[i]->getAni()->getWidth() / 2;
+		int botY = lvl.getEntities()[i]->GetPos().y;
+		int topY = lvl.getEntities()[i]->getAni()->getHeight();
+		if (secondHalf < pos.x&&pos.x < firstHalf&&botY<pos.y&&pos.y<botY+topY) {
+			lvl.LooseGame();
+		}
+	}
 	//if (pos.x - width / 2 > maxwidth) pos.x = -width / 2;
 }

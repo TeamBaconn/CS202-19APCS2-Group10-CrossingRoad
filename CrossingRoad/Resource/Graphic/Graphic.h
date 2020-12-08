@@ -2,8 +2,9 @@
 #define GRAPHIC_H_INCLUDED
 
 #include <Windows.h>
-#include "../Entity/Entity.h"
 #include <vector>
+
+#include "../Level.h"
 
 using namespace std;
 class Graphic {
@@ -16,7 +17,7 @@ public:
 	~Graphic() {};
 	
 	vector<Entity*> sort(vector<Entity*> values);
-	char** getDrawableMap(const vector<Entity*>& en);
+	char** getDrawableMap(const Level& level);
 };
 void GotoXY(int x, int y);
 #endif // GRAPHIC_H_INCLUDED

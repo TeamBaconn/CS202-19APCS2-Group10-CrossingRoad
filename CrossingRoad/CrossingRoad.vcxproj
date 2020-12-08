@@ -28,6 +28,7 @@
     <ClInclude Include="Resource\Entity\Entity.h" />
     <ClInclude Include="Resource\GameCore.h" />
     <ClInclude Include="Resource\Graphic\Graphic.h" />
+    <ClInclude Include="Resource\Level.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

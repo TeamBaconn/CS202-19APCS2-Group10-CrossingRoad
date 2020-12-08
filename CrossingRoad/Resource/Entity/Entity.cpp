@@ -1,10 +1,11 @@
 #include "Entity.h"
+#include "../Level.h"
 Position::Position() {
 	x = 0;
 	y = 0;
 }
 
-Position::Position(int x, int y){
+Position::Position(float x, float y){
 	this->x = x;
 	this->y = y;
 }
@@ -32,35 +33,26 @@ Entity::Entity() {
 void ReplaceAll(string& c, char f, char t) {
 	for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
 }
-Entity::Entity(Position pos, string type) {
+Entity::Entity(Position pos, Animator* animator) {
 	this->pos = pos;
-	ifstream f;
-	f.open("./Resource/Animation/" + type);
-	string c;
-	while (!f.eof()) {
-		getline(f, c);
-		cout << c << endl;
-		ReplaceAll(c, ' ', '!');
-		animator.push_back(c);
-		if (width == -1 || width < c.length()) width = c.length();
-	}
-	cout << width << endl;
-	f.close();
+	this->animator = animator;
 }
 
 Car::Car() : Entity() {}
 
-Car::Car(Position pos, string type) : Entity(pos, type) {}
+Car::Car(Position pos, Animator* animator) : Entity(pos, animator) {}
 
-void Car::Behavior() {
+void Car::Behavior(int rate) {
+	Entity::Behavior(rate);
 	Move(Position(1, 0));
-	if (pos.x - width / 2 > maxwidth) pos.x = -width/2;
+	if (pos.x - animator->getWidth() / 2 > LANE_WIDTH) pos.x = -animator->getWidth() / 2;
 }
 
 Player::Player() : Entity() {}
 
-Player::Player(Position pos, string type) : Entity(pos, type) {}
+Player::Player(Position pos, Animator* animator) : Entity(pos, animator) {}
 
-void Player::Behavior() {
-	if (pos.x - width / 2 > maxwidth) pos.x = -width / 2;
+void Player::Behavior(int rate) {
+	Entity::Behavior(rate);
+	//if (pos.x - width / 2 > maxwidth) pos.x = -width / 2;
 }

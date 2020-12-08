@@ -22,6 +22,9 @@
     <Filter Include="Source Files\Graphic">
       <UniqueIdentifier>{2e0c1652-6059-44d2-b37a-9fadc162405c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Level">
+      <UniqueIdentifier>{fb4ecccc-816c-4f92-9a1f-cc8247d98d54}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Resource\main.cpp">
@@ -46,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="Resource\Graphic\Graphic.h">
       <Filter>Source Files\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Level.h">
+      <Filter>Source Files\Level</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

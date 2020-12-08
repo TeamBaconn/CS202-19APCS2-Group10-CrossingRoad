@@ -5,19 +5,17 @@
 #include <fstream>
 #include <vector>
 #include "Graphic/Graphic.h"
-#include "Entity/Entity.h"
 #include <conio.h>
 #include <thread>
 
-#define ANIMATION_SETTING "./Resource/Animation/setting.txt"
+#define GAME_RATE 50
 
 using namespace std;
 
 class GameCore {
 private:
-	vector<Entity*> entities;
 	Graphic graphic;
-
+	Level level;
 public:
 	GameCore();
 	~GameCore() {};

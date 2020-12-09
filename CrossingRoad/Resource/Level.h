@@ -4,10 +4,12 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <Windows.h>
 
 #define LANE_WIDTH 120
 #define LANE_HEIGHT 8
 #define LANE_DISTANCE 5
+#define GAME_RATE 50
 
 #define CAM_LOCK_X true
 #define CAM_LOCK_Y false
@@ -87,6 +89,27 @@ public:
 			vector<Animator*> anim = getAnimation(CAR_ID);
 			entities.push_back(new Car
 			(Position(0, i*LANE_HEIGHT+LANE_HEIGHT/2), anim[rand() % anim.size()]));
+		}
+	}
+	void SpawnEntity() {
+		while (1) {
+			Sleep(4000);
+			int s = entities.size();
+			bool* del = new bool[s]{ 0 };
+			for (int i = 1; i < s; ++i) {
+				if (entities[i] != player && entities[i]->Behavior(GAME_RATE, *this)) {
+					del[i] = true;
+					vector<Animator*> anim = getAnimation(CAR_ID);
+					entities.push_back(new Car
+					(Position(0, (i - 1) * LANE_HEIGHT + LANE_HEIGHT / 2), anim[rand() % anim.size()]));
+				}
+			}
+			for (int i = s - 1; i >= 0; --i) {
+				if (del[i]) {
+					del[i] = false;
+					entities.erase(entities.begin() + i);
+				}
+			}
 		}
 	}
 	void LooseGame() {

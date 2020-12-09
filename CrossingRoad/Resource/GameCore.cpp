@@ -71,6 +71,8 @@ void GameCore::UserInput() {
 void GameCore::Start() {
 	//Draw game
 	thread t3(&GameCore::DrawGame, this);
+	// spawn entity
+	thread t4(&Level::SpawnEntity, &level);
 	//Behavior
 	thread t1(&GameCore::GameBehavior, this);
 	//Nhan input tu user
@@ -78,7 +80,7 @@ void GameCore::Start() {
 	t1.join();
 	t2.join();
 	t3.join();
-
+	t4.join();
 }
 void GameCore::DrawGame() {
 	char** old = nullptr;

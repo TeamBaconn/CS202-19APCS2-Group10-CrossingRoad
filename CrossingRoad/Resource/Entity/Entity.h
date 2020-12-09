@@ -103,7 +103,7 @@ public:
 	void changeBase(int id) {
 		animator->changeAnimation(id);
 	}
-	Position GetPos() {
+	Position GetPos() const {
 		return pos;
 	}
 	Animator* getAni() {
@@ -126,5 +126,11 @@ public:
 	Player();
 	Player(Position pos, Animator* animator);
 	bool Behavior(int rate, Level&level);
+};
+
+class Prop : public Entity {
+public:
+	Prop();
+	Prop(Position pos, Animator* animator);
 };
 #endif // ENTITY_H_INCLUDED

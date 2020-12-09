@@ -23,7 +23,7 @@
 #define SCREEN_HEIGHT 60
 
 #define INGAME_WIDTH 120
-#define INGAME_HEIGHT 40
+#define INGAME_HEIGHT 60
 
 #define ANIMATION "./Resource/Animation/"
 
@@ -71,8 +71,7 @@ public:
 	}
 	Level() = default;
 	Level(int lane, int mode) {
-		//Load resource 
-		cout << "Begin load data" << endl;
+		//Load resource
 		ifstream info;
 		info.open((string)ANIMATION + "/setting.txt");
 		string c;
@@ -91,9 +90,11 @@ public:
 
 		//Spawn
 		player = new Player
-		(Position(LANE_WIDTH / 2, 5), getAnimation(HUMAN_ID)[0]);
-
-		for (int i = 0; i < lane; i++) SpawnArray.push_back(0);
+		(Position(LANE_WIDTH / 2, 2), getAnimation(HUMAN_ID)[0]);
+		Animator* house = getAnimation(3)[0];
+		entities.push_back(new Prop(Position(house->getWidth() / 2, 5), house));
+		
+		for (int i = 1; i < lane; i++) SpawnArray.push_back(0);
 
 		// quai vat initialize
 		srand(time(NULL));
@@ -109,13 +110,13 @@ public:
 				entities.erase(entities.begin() + i);
 		}
 
-		for (int i = 1; i <= lane; ++i) {
+		for (int i = 1; i < lane; ++i) {
 			SpawnArray[i - 1] -= GAME_RATE;
 			if (SpawnArray[i - 1] < 0) {
 				SpawnArray[i - 1] = MIN_SPAWN_TIME + rand() % (SPAN_TIME / mode);
 				vector<Animator*> anim = getAnimation(CAR_ID);
 				entities.push_back(new Car
-				(Position(0, (i - 1) * LANE_HEIGHT + LANE_HEIGHT / 2), anim[rand() % anim.size()]));
+				(Position(0, i * LANE_HEIGHT + LANE_HEIGHT / 2), anim[rand() % anim.size()]));
 			}
 		}
 	}

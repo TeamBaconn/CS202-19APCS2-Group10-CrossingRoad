@@ -24,12 +24,11 @@ void GotoXY(int x, int y) {
 Graphic::Graphic() {
 
 }
-
 void Graphic::qSort(vector<Entity*> values, int low, int high) {
 	if (low < high) {
 		int i = low - 1;
 		for (int j = low; j < high; ++j) {
-			if (values[i]->pos.y > values[j]->pos.y) {
+			if (values[j]->pos.y > values[high]->pos.y) {
 				++i;
 				swap(values[i], values[j]);
 			}
@@ -41,7 +40,7 @@ void Graphic::qSort(vector<Entity*> values, int low, int high) {
 }
 
 vector<Entity*> Graphic::sort(vector<Entity*> values) {
-	qSort(values, 1, values.size() - 1);
+	qSort(values, 0, values.size() - 1);
 	return values;
 }
 
@@ -57,7 +56,7 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 	char** ingame = level.generateMap();
 	for (int i = 0; i < INGAME_WIDTH; i++)
 		for (int j = 0; j < INGAME_HEIGHT; j++)
-			draw(map, i, j, ingame, i + x, j + y, level);
+			draw(map,i,j,ingame,i+x,j + y,level);
 
 	if (state == GameState::PLAYING) {
 		//Draw game scene
@@ -71,7 +70,6 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 		Level::deleteMap(ingame, level.getWidth());
 		for (int i = 0; i < entities.size(); i++) {
 			Key key = entities[i]->animator->getKey();
-
 			Position pos(entities[i]->pos.x - entities[i]->animator->getWidth() / 2
 				, entities[i]->pos.y - key.key.size());
 			for (int j = 0; j < key.key.size(); j++) {

@@ -8,7 +8,6 @@
 #include <conio.h>
 #include <thread>
 
-#define GAME_RATE 50
 
 using namespace std;
 
@@ -23,7 +22,7 @@ public:
 	void DrawGame(); //Using graphic
 	void GameBehavior();
 	void UserInput();
-
+	
 	void Start();
 
 	friend class Graphic;

@@ -5,11 +5,16 @@
 #include <fstream>
 #include <vector>
 #include <Windows.h>
+#include <time.h>
+
+#define GAME_RATE 50
 
 #define LANE_WIDTH 120
 #define LANE_HEIGHT 8
 #define LANE_DISTANCE 5
-#define GAME_RATE 50
+
+#define MIN_SPAWN_TIME 2000
+#define SPAN_TIME 4000
 
 #define CAM_LOCK_X true
 #define CAM_LOCK_Y false
@@ -32,6 +37,7 @@ private:
 	vector<Entity*> entities;
 	int width, height, mode, lane;
 	//Lane
+	vector<int> SpawnArray;
 public:
 	void ReplaceAll(string& c, char f, char t) {
 		for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
@@ -77,32 +83,42 @@ public:
 		this->lane = lane;
 		this->mode = mode;
 		this->width = LANE_WIDTH;
-		this->height = lane*LANE_HEIGHT;
+		this->height = lane * LANE_HEIGHT;
 
 		//Spawn
 		player = new Player
-		(Position(LANE_WIDTH/2,5),getAnimation(HUMAN_ID)[0]);
+		(Position(LANE_WIDTH / 2, 5), getAnimation(HUMAN_ID)[0]);
 
-		//Thread rieng de spawn quai vat
+		// quai vat initialize
+		srand(time(NULL));
 		entities.push_back(player);
 		for (int i = 0; i < lane; i++) {
+			SpawnArray.push_back(MIN_SPAWN_TIME + rand() % (SPAN_TIME / mode));
 			vector<Animator*> anim = getAnimation(CAR_ID);
 			entities.push_back(new Car
-			(Position(0, i*LANE_HEIGHT+LANE_HEIGHT/2), anim[rand() % anim.size()]));
+			(Position(0, i * LANE_HEIGHT + LANE_HEIGHT / 2), anim[rand() % anim.size()]));
 		}
 	}
 	void SpawnEntity() {
 		while (1) {
-			Sleep(4000);
+			Sleep(GAME_RATE);
 			int s = entities.size();
-			bool* del = new bool[s]{ 0 };
-			for (int i = 1; i < s; ++i) {
-				if (entities[i] != player && entities[i]->Behavior(GAME_RATE, *this)) {
-					del[i] = true;
+			bool* del = new bool[s] { 0 };
+			for (int i = 1; i <= lane; ++i) {
+
+				SpawnArray[i - 1] -= GAME_RATE;
+				if (SpawnArray[i - 1] < 0) {
+					SpawnArray[i - 1] = MIN_SPAWN_TIME + rand() % (SPAN_TIME / mode);
+					//if (entities[i] != player) {
 					vector<Animator*> anim = getAnimation(CAR_ID);
 					entities.push_back(new Car
 					(Position(0, (i - 1) * LANE_HEIGHT + LANE_HEIGHT / 2), anim[rand() % anim.size()]));
+					//}
+					if (entities[i]->Behavior(GAME_RATE, *this)) {
+						del[i] = true;
+					}
 				}
+
 			}
 			for (int i = s - 1; i >= 0; --i) {
 				if (del[i]) {
@@ -115,7 +131,7 @@ public:
 	void LooseGame() {
 		cout << "n";
 	}
-	const Entity* getPlayer() const{
+	const Entity* getPlayer() const {
 		return player;
 	}
 	vector<Animator*> getAnimation(int type) {
@@ -126,12 +142,12 @@ public:
 	}
 	char** generateMap() const {
 		char** map = reset(width, height);
-		for (int i = 0; i < width; i++) 
-			for (int j = 0; j < height; j++) 
-				if (i == 0 || j == 0 || i == width - 1 || j == height - 1) 
+		for (int i = 0; i < width; i++)
+			for (int j = 0; j < height; j++)
+				if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
 					map[i][j] = '#';
 		for (int i = 1; i < lane; i++)
-			for (int j = 0; j < width; j+=LANE_DISTANCE) map[j][i * LANE_HEIGHT] = '-';
+			for (int j = 0; j < width; j += LANE_DISTANCE) map[j][i * LANE_HEIGHT] = '-';
 		return map;
 	}
 	static char** reset(int width, int height) {
@@ -160,7 +176,7 @@ public:
 	int getHeight() const {
 		return height;
 	}
-	
+
 	friend class GameCore;
 };
 #endif // LEVEL_H_INCLUDED

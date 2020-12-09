@@ -84,6 +84,7 @@ class Entity {
 protected:
 	Position pos;
 	Animator* animator;
+	bool remove = false;
 public:
 	//Constructor
 	Entity();
@@ -109,7 +110,7 @@ public:
 		return animator;
 	}
 	friend class Graphic;
-	
+	friend class Level;
 };
 
 // 1

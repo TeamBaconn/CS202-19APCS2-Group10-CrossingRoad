@@ -46,10 +46,7 @@ bool Car::Behavior(int rate, Level & level) {
 	Entity::Behavior(rate, level);
 	Move(Position(1, 0));
 
-	//Cham border
-	if (pos.x - animator->getWidth() / 2 > LANE_WIDTH) 
-		return true;
-	return false;
+	return pos.x - animator->getWidth() / 2 > LANE_WIDTH;
 }
 
 Player::Player() : Entity() {}

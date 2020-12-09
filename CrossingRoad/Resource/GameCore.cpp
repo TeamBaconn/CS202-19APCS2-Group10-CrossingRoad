@@ -38,8 +38,7 @@ void GameCore::GameBehavior() {
 			state = GameState::MENU;
 		}
 		Sleep(GAME_RATE);
-		for(int i = 0; i < level.getEntities().size(); i++) 
-			level.getEntities()[i]->Behavior(GAME_RATE,level);
+		level.CheckEntity();
 	}
 }
 void GameCore::UserInput() {
@@ -48,7 +47,7 @@ void GameCore::UserInput() {
 		char c = _getch();
 
 		if (state != GameState::PLAYING) {
-			level = Level(10,1);
+			level = Level(10,10);
 			state = GameState::PLAYING;
 			continue;
 		}
@@ -63,11 +62,11 @@ void GameCore::UserInput() {
 			player->changeBase(3);
 			break;
 		case 75:
-			player->Move(Position(-1,0));
+			player->Move(Position(-2,0));
 			player->changeBase(2);
 			break;
 		case 77:
-			player->Move(Position(1,0));
+			player->Move(Position(2,0));
 			player->changeBase(1);
 			break;
 		}
@@ -76,8 +75,6 @@ void GameCore::UserInput() {
 void GameCore::Start() {
 	//Draw game
 	thread t3(&GameCore::DrawGame, this);
-	// spawn entity
-	thread t4(&Level::SpawnEntity, &level);
 	//Behavior
 	thread t1(&GameCore::GameBehavior, this);
 	//Nhan input tu user
@@ -85,7 +82,6 @@ void GameCore::Start() {
 	t1.join();
 	t2.join();
 	t3.join();
-	t4.join();
 }
 void GameCore::DrawGame() {
 	char** old = nullptr;

@@ -13,8 +13,8 @@
 #define LANE_HEIGHT 8
 #define LANE_DISTANCE 5
 
-#define MIN_SPAWN_TIME 2000
-#define SPAN_TIME 4000
+#define MIN_SPAWN_TIME 1000
+#define SPAN_TIME 8000
 
 #define CAM_LOCK_X true
 #define CAM_LOCK_Y false
@@ -93,42 +93,29 @@ public:
 		player = new Player
 		(Position(LANE_WIDTH / 2, 5), getAnimation(HUMAN_ID)[0]);
 
+		for (int i = 0; i < lane; i++) SpawnArray.push_back(0);
+
 		// quai vat initialize
 		srand(time(NULL));
 		entities.push_back(player);
-		for (int i = 0; i < lane; i++) {
-			SpawnArray.push_back(MIN_SPAWN_TIME + rand() % (SPAN_TIME / mode));
-			vector<Animator*> anim = getAnimation(CAR_ID);
-			entities.push_back(new Car
-			(Position(0, i * LANE_HEIGHT + LANE_HEIGHT / 2), anim[rand() % anim.size()]));
-		}
 	}
-	void SpawnEntity() {
-		while (1) {
-			Sleep(GAME_RATE);
-			int s = entities.size();
-			bool* del = new bool[s] { 0 };
-			for (int i = 1; i <= lane; ++i) {
+	void CheckEntity() {
+		for (int i = 0; i < entities.size(); i++)
+			if (entities[i]->Behavior(GAME_RATE, *this)) entities[i]->remove = true;
 
-				SpawnArray[i - 1] -= GAME_RATE;
-				if (SpawnArray[i - 1] < 0) {
-					SpawnArray[i - 1] = MIN_SPAWN_TIME + rand() % (SPAN_TIME / mode);
-					//if (entities[i] != player) {
-					vector<Animator*> anim = getAnimation(CAR_ID);
-					entities.push_back(new Car
-					(Position(0, (i - 1) * LANE_HEIGHT + LANE_HEIGHT / 2), anim[rand() % anim.size()]));
-					//}
-					if (entities[i]->Behavior(GAME_RATE, *this)) {
-						del[i] = true;
-					}
-				}
+		int s = entities.size();
+		for (int i = s - 1; i >= 0; --i) {
+			if (entities[i]->remove)
+				entities.erase(entities.begin() + i);
+		}
 
-			}
-			for (int i = s - 1; i >= 0; --i) {
-				if (del[i]) {
-					del[i] = false;
-					entities.erase(entities.begin() + i);
-				}
+		for (int i = 1; i <= lane; ++i) {
+			SpawnArray[i - 1] -= GAME_RATE;
+			if (SpawnArray[i - 1] < 0) {
+				SpawnArray[i - 1] = MIN_SPAWN_TIME + rand() % (SPAN_TIME / mode);
+				vector<Animator*> anim = getAnimation(CAR_ID);
+				entities.push_back(new Car
+				(Position(0, (i - 1) * LANE_HEIGHT + LANE_HEIGHT / 2), anim[rand() % anim.size()]));
 			}
 		}
 	}

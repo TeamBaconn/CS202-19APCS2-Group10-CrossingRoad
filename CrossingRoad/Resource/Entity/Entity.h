@@ -94,8 +94,9 @@ public:
 	//Functions
 	Position Move(Position pos);
 	
-	virtual void Behavior(int rate, Level&level) {
+	virtual bool Behavior(int rate, Level&level) {
 		animator->push(rate);
+		return false;
 	}
 
 	void changeBase(int id) {
@@ -116,13 +117,13 @@ class Car : public Entity {
 public:
 	Car(); 
 	Car(Position pos, Animator* animator);
-	void Behavior(int rate,  Level& level);
+	bool Behavior(int rate,  Level& level);
 };
 
 class Player : public Entity {
 public:
 	Player();
 	Player(Position pos, Animator* animator);
-	void Behavior(int rate, Level&level);
+	bool Behavior(int rate, Level&level);
 };
 #endif // ENTITY_H_INCLUDED

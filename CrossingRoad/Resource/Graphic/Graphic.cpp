@@ -24,13 +24,24 @@ void GotoXY(int x, int y) {
 Graphic::Graphic() {
 
 }
-vector<Entity*> Graphic::sort(vector<Entity*> values) {
-	for(int i = 0; i < values.size()-1; i++)
-		for (int j = i + 1; j < values.size(); j++)if (values[i]->pos.y > values[j]->pos.y) {
-			Entity* tmp = values[i];
-			values[i] = values[j];
-			values[j] = tmp;
+
+void Graphic::qSort(vector<Entity*> values, int low, int high) {
+	if (low < high) {
+		int i = low - 1;
+		for (int j = low; j < high; ++j) {
+			if (values[i]->pos.y > values[j]->pos.y) {
+				++i;
+				swap(values[i], values[j]);
+			}
 		}
+		swap(values[i + 1], values[high]);
+		qSort(values, low, i);
+		qSort(values, i + 2, high);
+	}
+}
+
+vector<Entity*> Graphic::sort(vector<Entity*> values) {
+	qSort(values, 1, values.size() - 1);
 	return values;
 }
 
@@ -45,7 +56,7 @@ char** Graphic::getDrawableMap(const Level& level) {
 	char** ingame = level.generateMap();
 	for (int i = 0; i < INGAME_WIDTH; i++)
 		for (int j = 0; j < INGAME_HEIGHT; j++)
-			draw(map,i,j,ingame,i+x,j + y,level);
+			draw(map, i, j, ingame, i + x, j + y, level);
 
 	Level::deleteMap(ingame, level.getWidth());
 	for (int i = 0; i < entities.size(); i++) {
@@ -58,12 +69,12 @@ char** Graphic::getDrawableMap(const Level& level) {
 				//Check its null character ! by default
 				char c = key.key[j][k];
 
-				drawC(map, pos.x + k-x, pos.y + j-y, c);
+				drawC(map, pos.x + k - x, pos.y + j - y, c);
 			}
 		}
 		//For debug
-		drawC(map, entities[i]->pos.x-x, entities[i]->pos.y-y, '0' + i);
-		drawC(map, pos.x-x, pos.y-y, 'X');
+		drawC(map, entities[i]->pos.x - x, entities[i]->pos.y - y, '0' + i);
+		drawC(map, pos.x - x, pos.y - y, 'X');
 	}
 	return map;
 }

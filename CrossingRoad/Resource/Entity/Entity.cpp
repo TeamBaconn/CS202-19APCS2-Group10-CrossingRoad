@@ -5,14 +5,14 @@ Position::Position() {
 	y = 0;
 }
 
-Position::Position(float x, float y){
+Position::Position(float x, float y) {
 	this->x = x;
 	this->y = y;
 }
 
-Position::~Position()=default;
+Position::~Position() = default;
 
-Position Position::operator+(const Position& p) {
+Position Position::operator+(const Position & p) {
 	Position tmp(x, y);
 	tmp.x += p.x;
 	tmp.y += p.y;
@@ -30,42 +30,45 @@ Position Entity::Move(Position pos) {
 Entity::Entity() {
 	pos = Position(0, 0);
 }
-void ReplaceAll(string& c, char f, char t) {
+void ReplaceAll(string & c, char f, char t) {
 	for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
 }
-Entity::Entity(Position pos, Animator* animator) {
+Entity::Entity(Position pos, Animator * animator) {
 	this->pos = pos;
 	this->animator = animator;
 }
 
 Car::Car() : Entity() {}
 
-Car::Car(Position pos, Animator* animator) : Entity(pos, animator) {}
+Car::Car(Position pos, Animator * animator) : Entity(pos, animator) {}
 
-void Car::Behavior(int rate,Level&level) {
-	Entity::Behavior(rate,level);
+bool Car::Behavior(int rate, Level & level) {
+	Entity::Behavior(rate, level);
 	Move(Position(1, 0));
-	
+
 	//Cham border
-	if (pos.x - animator->getWidth() / 2 > LANE_WIDTH) pos.x = -animator->getWidth() / 2;
+	if (pos.x - animator->getWidth() / 2 > LANE_WIDTH) 
+		return true;
+	return false;
 }
 
 Player::Player() : Entity() {}
 
-Player::Player(Position pos, Animator* animator) : Entity(pos, animator) {}
+Player::Player(Position pos, Animator * animator) : Entity(pos, animator) {}
 
 
-void Player::Behavior(int rate,Level& lvl) {
-	Entity::Behavior(rate,lvl);
+bool Player::Behavior(int rate, Level & lvl) {
+	Entity::Behavior(rate, lvl);
 	for (int i = 0; i < lvl.getEntities().size(); i++) {
 		if (lvl.getEntities()[i] == this) continue;
 		int firstHalf = lvl.getEntities()[i]->GetPos().x + lvl.getEntities()[i]->getAni()->getWidth() / 2;
 		int secondHalf = lvl.getEntities()[i]->GetPos().x - lvl.getEntities()[i]->getAni()->getWidth() / 2;
 		int botY = lvl.getEntities()[i]->GetPos().y;
 		int topY = lvl.getEntities()[i]->getAni()->getHeight();
-		if (secondHalf < pos.x&&pos.x < firstHalf&&botY<pos.y&&pos.y<botY+topY) {
+		if (secondHalf < pos.x && pos.x < firstHalf && botY < pos.y && pos.y < botY + topY) {
 			lvl.LooseGame();
 		}
 	}
+	return false;
 	//if (pos.x - width / 2 > maxwidth) pos.x = -width / 2;
 }

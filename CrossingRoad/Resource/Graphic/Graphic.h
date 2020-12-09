@@ -16,6 +16,7 @@ public:
 
 	~Graphic() {};
 	
+	void qSort(vector<Entity*> values, int low, int high);
 	vector<Entity*> sort(vector<Entity*> values);
 	char** getDrawableMap(const Level& level);
 };

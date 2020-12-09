@@ -49,14 +49,6 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 	vector<Entity*> entities = sort(level.getEntities());
 
 	char** map = Level::reset(SCREEN_WIDTH, SCREEN_HEIGHT);
-	
-	int x = CAM_LOCK_X ? 0 : (int)level.getPlayer()->pos.x - INGAME_WIDTH / 2;
-	int y = CAM_LOCK_Y ? 0 : (int)level.getPlayer()->pos.y - INGAME_HEIGHT / 2;
-	//Draw game scene
-	char** ingame = level.generateMap();
-	for (int i = 0; i < INGAME_WIDTH; i++)
-		for (int j = 0; j < INGAME_HEIGHT; j++)
-			draw(map,i,j,ingame,i+x,j + y,level);
 
 	if (state == GameState::PLAYING) {
 		//Draw game scene

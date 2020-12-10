@@ -100,14 +100,16 @@ public:
 	Entity(Position pos, Animator* animator);
 
 	~Entity();
-	
+
 	//Functions
 	Position Move(Position pos);
-	
-	virtual bool Behavior(int rate, Level&level) {
+
+	virtual bool Behavior(int rate, Level& level) {
 		data.push(rate);
 		return false;
 	}
+
+	virtual bool isCar() { return false; }
 
 	void changeBase(int id) {
 		data.changeAnimation(id);
@@ -125,16 +127,17 @@ public:
 // 1
 class Car : public Entity {
 public:
-	Car(); 
+	Car();
 	Car(Position pos, Animator* animator);
-	bool Behavior(int rate,  Level& level);
+	bool Behavior(int rate, Level& level);
+	bool isCar();
 };
 
 class Player : public Entity {
 public:
 	Player();
 	Player(Position pos, Animator* animator);
-	bool Behavior(int rate, Level&level);
+	bool Behavior(int rate, Level& level);
 };
 
 class Prop : public Entity {

@@ -23,10 +23,10 @@
 #define SCREEN_HEIGHT 60
 
 #define INGAME_WIDTH 120
-#define INGAME_HEIGHT 60
+#define INGAME_HEIGHT 30
 
 #define ANIMATION "./Resource/Animation/"
-
+const std::string WHITESPACE = " \n\r\t\f\v";
 #include "Entity/Entity.h"
 #include <random>
 
@@ -40,11 +40,42 @@ private:
 	vector<Entity*> entities;
 	int width, height, mode, lane;
 	bool lost = false;
+	vector<int> score;
 	//Lane
 	vector<int> SpawnArray;
 public:
+	int getScore() {
+		unsigned int sum = 0;
+		for (auto& i : score) sum += i;
+		return sum;
+	}
+	int& getMode() { return mode; }
 	void ReplaceAll(string& c, char f, char t) {
 		for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
+	}
+	Frame trim(Frame fr) {
+	
+		int mintrim=999;
+		int maxtrim=0;
+		for (int i = 0; i < fr.key.size(); i++) {
+			for (int j = 0; j < fr.key[i].size(); j++) {
+				if (fr.key[i][j] != ' ' && j < mintrim) {
+					mintrim = j;
+					break;
+				}
+			}
+			for (int j = fr.key[i].size() - 1; j >= 0; j--) {
+				if (fr.key[i][j] != ' ' && j < maxtrim) {
+					maxtrim = j;
+					break;
+				}
+			}
+		}
+		for (int i = 0; i < fr.key.size(); i++) {
+			fr.key[i].erase(0, mintrim - 1);
+			fr.key[i].erase(maxtrim + 1, fr.key[i].size() - 1);
+		}
+		return fr;
 	}
 	Animator* readAnimator(string path, int id) {
 		ifstream info((string)ANIMATION + "/" + path);
@@ -67,10 +98,11 @@ public:
 			}
 			kc.key.push_back(k);
 		}
+		trim(kc);
 		return new Animator(frame, speed, id, max, set);
 	}
 	Level() = default;
-	Level(int lane, int mode) {
+	Level(int lane, int mode) :score(lane + 1) {
 		//Load resource
 		ifstream info;
 		info.open((string)ANIMATION + "/setting.txt");
@@ -93,7 +125,7 @@ public:
 		(Position(LANE_WIDTH / 2, 2), getAnimation(HUMAN_ID)[0]);
 		Animator* house = getAnimation(3)[0];
 		entities.push_back(new Prop(Position(house->getWidth() / 2, 5), house));
-		
+
 		for (int i = 1; i < lane; i++) SpawnArray.push_back(0);
 
 		// quai vat initialize
@@ -101,15 +133,41 @@ public:
 		entities.push_back(player);
 	}
 	void CheckEntity() {
+		// check if player has won, to next level (mode)
+		if (entities.size() == 1) {
+			spawnRandom();
+			return;
+		}
+
 		for (int i = 0; i < entities.size(); i++)
-			if (entities[i]->Behavior(GAME_RATE, *this)) entities[i]->remove = true;
+			if (entities[i] != player) {
+				if (entities[i]->Behavior(GAME_RATE, *this)) entities[i]->remove = true;
+			}
+			else if (entities[i] == player) {
+
+				unsigned int pos = find(score.begin(), score.end(), 0) - score.begin();
+
+				if (entities[i]->GetPos().y > pos * LANE_HEIGHT) {
+					score[pos] = 10;
+				}
+
+				// if win delete all Car instances
+				if (entities[i]->Behavior(GAME_RATE, *this)) {
+					score[(score.size() - 1)] = 20;
+					for (int i = 0; i < entities.size(); ++i)
+						if (entities[i] != player && entities[i]->isCar()) entities[i]->remove = true;
+					break;
+				}
+			}
 
 		int s = entities.size();
 		for (int i = s - 1; i >= 0; --i) {
 			if (entities[i]->remove)
 				entities.erase(entities.begin() + i);
 		}
-
+		spawnRandom();
+	}
+	void spawnRandom() {
 		for (int i = 1; i < lane; ++i) {
 			SpawnArray[i - 1] -= GAME_RATE;
 			if (SpawnArray[i - 1] < 0) {
@@ -126,7 +184,7 @@ public:
 	const Entity* getPlayer() const {
 		return player;
 	}
-	vector<Animator*> getAnimation(int type) const{
+	vector<Animator*> getAnimation(int type) const {
 		vector<Animator*> list;
 		for (int i = 0; i < anim_list.size(); i++)
 			if (anim_list[i]->id == type) list.emplace_back(anim_list[i]);
@@ -168,7 +226,7 @@ public:
 	int getHeight() const {
 		return height;
 	}
-	
+
 	bool isLost() const {
 		return lost;
 	}

@@ -26,7 +26,7 @@
 #define INGAME_HEIGHT 30
 
 #define ANIMATION "./Resource/Animation/"
-
+const std::string WHITESPACE = " \n\r\t\f\v";
 #include "Entity/Entity.h"
 #include <random>
 
@@ -46,15 +46,29 @@ public:
 	void ReplaceAll(string& c, char f, char t) {
 		for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
 	}
-	string trim(const string& str)
-	{
-		size_t first = str.find_first_not_of(' ');
-		if (string::npos == first)
-		{
-			return str;
+	Frame trim(Frame fr) {
+	
+		int mintrim=999;
+		int maxtrim=0;
+		for (int i = 0; i < fr.key.size(); i++) {
+			for (int j = 0; j < fr.key[i].size(); j++) {
+				if (fr.key[i][j] != ' ' && j < mintrim) {
+					mintrim = j;
+					break;
+				}
+			}
+			for (int j = fr.key[i].size() - 1; j >= 0; j--) {
+				if (fr.key[i][j] != ' ' && j < maxtrim) {
+					maxtrim = j;
+					break;
+				}
+			}
 		}
-		size_t last = str.find_last_not_of(' ');
-		return str.substr(first, (last - first + 1));
+		for (int i = 0; i < fr.key.size(); i++) {
+			fr.key[i].erase(0, mintrim - 1);
+			fr.key[i].erase(maxtrim + 1, fr.key[i].size() - 1);
+		}
+		return fr;
 	}
 	Animator* readAnimator(string path, int id) {
 		ifstream info((string)ANIMATION + "/" + path);
@@ -68,7 +82,6 @@ public:
 		int max = -1;
 		while (!info.eof()) {
 			getline(info, k);
-			trim(k);
 			ReplaceAll(k, ' ', '!');//Set background opacity to 0
 			if (max == -1 || max < k.length()) max = k.length();
 			if (k == "X") {
@@ -78,6 +91,7 @@ public:
 			}
 			kc.key.push_back(k);
 		}
+		trim(kc);
 		return new Animator(frame, speed, id, max, set);
 	}
 	Level() = default;

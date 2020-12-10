@@ -50,13 +50,18 @@ bool Car::Behavior(int rate, Level & level) {
 	int secondHalf = GetPos().x - getAni()->getWidth() / 2;
 	int botY = GetPos().y;
 	int topY = getAni()->getHeight();
-	if (secondHalf < level.getPlayer()->GetPos().x 
-		&& level.getPlayer()->GetPos().x < firstHalf 
-		&& botY>level.getPlayer()->GetPos().y 
+	if (secondHalf < level.getPlayer()->GetPos().x
+		&& level.getPlayer()->GetPos().x < firstHalf
+		&& botY>level.getPlayer()->GetPos().y
 		&& level.getPlayer()->GetPos().y > botY - topY) {
 		level.LooseGame();
 	}
 	return pos.x - animator->getWidth() / 2 > LANE_WIDTH;
+}
+
+bool Car::isCar()
+{
+	return true;
 }
 
 Player::Player() : Entity() {}
@@ -66,11 +71,16 @@ Player::Player(Position pos, Animator * animator) : Entity(pos, animator) {}
 
 bool Player::Behavior(int rate, Level & lvl) {
 	Entity::Behavior(rate, lvl);
-
+	if (pos.y > lvl.getHeight()) {
+		++lvl.getMode();
+		pos.x = LANE_WIDTH / 2;
+		pos.y = 3;
+		return true;
+	}
 	return false;
 	//if (pos.x - width / 2 > maxwidth) pos.x = -width / 2;
 }
 
 Prop::Prop() : Entity() {}
 
-Prop::Prop(Position pos, Animator* animator) : Entity(pos, animator) {}
+Prop::Prop(Position pos, Animator * animator) : Entity(pos, animator) {}

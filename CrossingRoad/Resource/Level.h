@@ -23,7 +23,7 @@
 #define SCREEN_HEIGHT 60
 
 #define INGAME_WIDTH 120
-#define INGAME_HEIGHT 60
+#define INGAME_HEIGHT 30
 
 #define ANIMATION "./Resource/Animation/"
 
@@ -46,6 +46,16 @@ public:
 	void ReplaceAll(string& c, char f, char t) {
 		for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
 	}
+	string trim(const string& str)
+	{
+		size_t first = str.find_first_not_of(' ');
+		if (string::npos == first)
+		{
+			return str;
+		}
+		size_t last = str.find_last_not_of(' ');
+		return str.substr(first, (last - first + 1));
+	}
 	Animator* readAnimator(string path, int id) {
 		ifstream info((string)ANIMATION + "/" + path);
 		if (!info.is_open()) return nullptr;
@@ -58,6 +68,7 @@ public:
 		int max = -1;
 		while (!info.eof()) {
 			getline(info, k);
+			trim(k);
 			ReplaceAll(k, ' ', '!');//Set background opacity to 0
 			if (max == -1 || max < k.length()) max = k.length();
 			if (k == "X") {

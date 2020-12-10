@@ -36,6 +36,7 @@ void ReplaceAll(string & c, char f, char t) {
 Entity::Entity(Position pos, Animator * animator) {
 	this->pos = pos;
 	this->animator = animator;
+	this->data = AnimatorData(animator);
 }
 
 Car::Car() : Entity() {}

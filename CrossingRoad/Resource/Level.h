@@ -53,21 +53,21 @@ public:
 		string k;
 		info >> speed >> set;
 		info.ignore();
-		vector<Key> key;
-		Key kc;
+		vector<Frame> frame;
+		Frame kc;
 		int max = -1;
 		while (!info.eof()) {
 			getline(info, k);
 			ReplaceAll(k, ' ', '!');//Set background opacity to 0
 			if (max == -1 || max < k.length()) max = k.length();
 			if (k == "X") {
-				key.push_back(kc);
-				kc = *new Key();
+				frame.push_back(kc);
+				kc = *new Frame();
 				continue;
 			}
 			kc.key.push_back(k);
 		}
-		return new Animator(key, speed, id, max, set);
+		return new Animator(frame, speed, id, max, set);
 	}
 	Level() = default;
 	Level(int lane, int mode) {

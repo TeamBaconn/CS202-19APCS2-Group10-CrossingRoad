@@ -10,63 +10,71 @@
 
 using namespace std;
 
-struct Key {
+struct Frame {
 	vector<string> key;
 };
-
 class Animator {
 private:
-	int id,k, time, current_time, width;
-	int set;
-	int base, lim;
-	int refresh;
-	vector<Key> frame;
+	int id, width, set, speed;
+	vector<Frame> animation_set;
 public:
 	Animator() = default;
-	Animator(vector<Key>& frame, int time, int id, int width, int set) {
-		k = 0;
+	Animator(vector<Frame>& animation_set, int speed, int id, int width, int set) {
 		this->width = width;
-		this->frame = frame;
-		this->time = time;
+		this->animation_set = animation_set;
 		this->id = id;
 		this->set = set;
-		this->current_time = 0;
-		this->refresh = 0;
-		base = 0;
-		lim = frame.size() / set;
-	}
-	Key getKey() {
-		if (k >= lim) {
-			if (refresh > 50) {
-				base = 0;
-				lim = frame.size() / set;
-			}
-			k = base;
-		}
-		return frame[k];
-	}
-	void push(int frame) {
-		current_time += frame;
-		refresh += frame;
-		if (current_time >= time) {
-			current_time = 0;
-			k++;
-		}
-	}
-	void changeAnimation(int i) {
-		base = i * frame.size() / set;
-		lim = base + frame.size() / set;
-		if (k < base && lim >= k) k = base;
-		refresh = 0;
+		this->speed = speed;
 	}
 	int getWidth() {
 		return width;
 	}
 	int getHeight() {
-		return getKey().key.size();
+		return animation_set[0].key.size();
 	}
 	~Animator() = default;
+
 	friend class Level;
+	friend class AnimatorData;
+};
+class AnimatorData {
+private:
+	int k, current_time, base, lim, refresh;
+	Animator* animator;
+public:
+	AnimatorData() = default;
+	AnimatorData(Animator* animator) {
+		this->animator = animator;
+		k = 0;
+		current_time = 0;
+		refresh = 0;
+		base = 0;
+		lim = animator->animation_set.size() / animator->set;
+	}
+	void push(int frame) {
+		current_time += frame;
+		refresh += frame;
+		if (current_time >= animator->speed) {
+			current_time = 0;
+			k++;
+		}
+	}
+	void changeAnimation(int i) {
+		base = i * animator->animation_set.size() / animator->set;
+		lim = base + animator->animation_set.size() / animator->set;
+		if (k < base && lim >= k) k = base;
+		refresh = 0;
+	}
+	Frame getFrame() {
+		if (k >= lim) {
+			if (refresh > 50) {
+				base = 0;
+				lim = animator->animation_set.size() / animator->set;
+			}
+			k = base;
+		}
+		return animator->animation_set[k];
+	}
 };
 
 class Position {
@@ -84,6 +92,7 @@ class Entity {
 protected:
 	Position pos;
 	Animator* animator;
+	AnimatorData data;
 	bool remove = false;
 public:
 	//Constructor
@@ -96,12 +105,12 @@ public:
 	Position Move(Position pos);
 	
 	virtual bool Behavior(int rate, Level&level) {
-		animator->push(rate);
+		data.push(rate);
 		return false;
 	}
 
 	void changeBase(int id) {
-		animator->changeAnimation(id);
+		data.changeAnimation(id);
 	}
 	Position GetPos() const {
 		return pos;

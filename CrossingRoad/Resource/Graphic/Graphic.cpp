@@ -21,14 +21,13 @@ void GotoXY(int x, int y) {
 	coord.Y = y;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
-Graphic::Graphic() {
+Graphic::Graphic() = default;
 
-}
-void Graphic::qSort(vector<Entity*> values, int low, int high) {
+void Graphic::qSort(vector<Entity*>& values, int low, int high) {
 	if (low < high) {
 		int i = low - 1;
 		for (int j = low; j < high; ++j) {
-			if (values[j]->pos.y > values[high]->pos.y) {
+			if (values[j]->pos.y < values[high]->pos.y) {
 				++i;
 				swap(values[i], values[j]);
 			}
@@ -39,18 +38,13 @@ void Graphic::qSort(vector<Entity*> values, int low, int high) {
 	}
 }
 
-vector<Entity*> Graphic::sort(vector<Entity*> values) {
-	qSort(values, 0, values.size() - 1);
-	return values;
-}
-
 char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
-	
-	vector<Entity*> entities = sort(level.getEntities());
-
 	char** map = Level::reset(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	if (state == GameState::PLAYING) {
+		//Sort entities
+		vector<Entity*> entities = level.getEntities();
+		qSort(entities, 0, entities.size() - 1);
 		//Draw game scene
 		int x = CAM_LOCK_X ? 0 : (int)level.getPlayer()->pos.x - INGAME_WIDTH / 2;
 		int y = CAM_LOCK_Y ? 0 : (int)level.getPlayer()->pos.y - INGAME_HEIGHT / 2;
@@ -61,7 +55,7 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 
 		Level::deleteMap(ingame, level.getWidth());
 		for (int i = 0; i < entities.size(); i++) {
-			Key key = entities[i]->animator->getKey();
+			Frame key = entities[i]->data.getFrame();
 			Position pos(entities[i]->pos.x - entities[i]->animator->getWidth() / 2
 				, entities[i]->pos.y - key.key.size());
 			for (int j = 0; j < key.key.size(); j++) {

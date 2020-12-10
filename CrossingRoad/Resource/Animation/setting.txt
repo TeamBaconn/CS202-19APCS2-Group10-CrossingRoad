@@ -10,3 +10,5 @@ car3.txt
 menu_human_face.txt
 3
 house.txt
+1
+dino.txt

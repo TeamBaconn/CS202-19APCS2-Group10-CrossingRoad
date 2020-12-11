@@ -1,12 +1,17 @@
 #ifndef ENTITY_H_INCLUDED
 #define ENTITY_H_INCLUDED
 
-#include<vector>
-#include<string>
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <vector>
 
 #define HUMAN_ID 0
 #define CAR_ID 1
 #define MENU_ID 2
+
+#define ANIMATION "./Resource/Animation/"
+const std::string WHITESPACE = " \n\r\t\f\v";
 
 using namespace std;
 
@@ -76,6 +81,8 @@ public:
 		return animator->animation_set[k];
 	}
 };
+void ReplaceAll(string& c, char f, char t);
+Animator* readAnimator(string path, int id);
 
 class Position {
 public:

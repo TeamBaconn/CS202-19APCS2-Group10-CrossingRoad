@@ -5,7 +5,6 @@
 
 #define HUMAN_ID 0
 #define CAR_ID 1
-#define MENU_ID 2
 
 class Position {
 public:
@@ -58,7 +57,6 @@ public:
 // 1
 class Car : public Entity {
 public:
-	bool toRight;
 	Car();
 	Car(Position pos, Animator* animator);
 	Car(Position pos, Animator* animator, bool toRight);

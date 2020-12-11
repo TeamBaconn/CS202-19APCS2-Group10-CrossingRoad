@@ -10,6 +10,7 @@ public:
 	//Constructor
 	Menu() {
 		list.push_back(readAnimator("menu_human_face.txt", 1));
+		list.push_back(readAnimator("speech_bubble.txt", 1));
 	}
 
 	void push(int speed) {

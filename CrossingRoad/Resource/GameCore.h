@@ -9,6 +9,7 @@
 #include "Graphic/Graphic.h"
 
 #include <conio.h>
+#include <stdlib.h>
 #include <thread>
 
 

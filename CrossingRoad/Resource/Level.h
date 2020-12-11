@@ -54,7 +54,6 @@ public:
 		for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
 	}
 	Frame trim(Frame fr) {
-	
 		int mintrim=999;
 		int maxtrim=0;
 		for (int i = 0; i < fr.key.size(); i++) {
@@ -92,6 +91,7 @@ public:
 			ReplaceAll(k, ' ', '!');//Set background opacity to 0
 			if (max == -1 || max < k.length()) max = k.length();
 			if (k == "X") {
+				trim(kc);
 				frame.push_back(kc);
 				kc = *new Frame();
 				continue;

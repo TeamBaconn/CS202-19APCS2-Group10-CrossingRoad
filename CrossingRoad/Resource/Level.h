@@ -34,13 +34,42 @@ private:
 	vector<Entity*> entities;
 	int width, height, mode, lane;
 	bool lost = false;
-	vector<int> score;
+	int checkPoint = 1;
+	int score = 0;
 	//Lane
 	vector<int> SpawnArray;
 public:
-	int& getMode() { return mode; }
+
+
+	void ReplaceAll(string& c, char f, char t) {
+		for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
+	}
+	Animator* readAnimator(string path, int id) {
+		ifstream info((string)ANIMATION + "/" + path);
+		if (!info.is_open()) return nullptr;
+		int speed, set;
+		string k;
+		info >> speed >> set;
+		info.ignore();
+		vector<Frame> frame;
+		Frame kc;
+		int max = -1;
+		while (!info.eof()) {
+			getline(info, k);
+			ReplaceAll(k, ' ', '!');//Set background opacity to 0
+			if (max == -1 || max < k.length()) max = k.length();
+			if (k == "X") {
+				frame.push_back(kc);
+				kc = *new Frame();
+				continue;
+			}
+			kc.key.push_back(k);
+		}
+		return new Animator(frame, speed, id, max, set);
+	}
 	Level() = default;
-	Level(int lane, int mode) : score(lane + 1, 0) {
+	Level(int lane, int mode) {
+		// debug
 		mode = 1;
 		lane = 2;
 		//Load resource
@@ -74,33 +103,33 @@ public:
 	}
 	void CheckEntity() {
 		// check if player has won, to next level (mode)
-		if (entities.size() == 1) {
-			spawnRandom();
-			return;
-		}
-
 		for (int i = 0; i < entities.size(); i++)
 			if (entities[i] != player) {
 				if (entities[i]->Behavior(GAME_RATE, *this)) entities[i]->remove = true;
 			}
 			else if (entities[i] == player) {
 
-				unsigned int pos = find(score.begin(), score.end(), 0) - score.begin();
-				pos = pos ? pos : 1;
-				if (entities[i]->GetPos().y > pos * LANE_HEIGHT) {
-					score[pos] = 10;
-				}
-
 				// if win delete all Car instances
 				if (entities[i]->Behavior(GAME_RATE, *this)) {
-					for (int i = 0; i < score.size() - 1; ++i) {
-						score[(score.size() - 1)] += score[i];
-						score[i] = 0;
-					}
-					score[(score.size() - 1)] += 20;
+					for (int i = 0; i < lane - 1; ++i)
+						SpawnArray[i] = 0;
+					SpawnArray.push_back(0);
+
+					++mode;
+					if (mode % 3)
+						++lane;
+					width = LANE_WIDTH;
+					height = lane * LANE_HEIGHT;
+					score += 20;
+					checkPoint = 1;
+
 					for (int i = 0; i < entities.size(); ++i)
 						if (entities[i] != player && entities[i]->isCar()) entities[i]->remove = true;
 					break;
+				}
+				else if (entities[i]->GetPos().y > checkPoint * LANE_HEIGHT) {
+					score += 10;
+					++checkPoint;
 				}
 			}
 
@@ -117,8 +146,14 @@ public:
 			if (SpawnArray[i - 1] < 0) {
 				SpawnArray[i - 1] = MIN_SPAWN_TIME + rand() % (SPAN_TIME / mode);
 				vector<Animator*> anim = getAnimation(CAR_ID);
-				entities.push_back(new Car
-				(Position(0, i * LANE_HEIGHT + LANE_HEIGHT / 2), anim[rand() % anim.size()]));
+
+				Animator* e = anim[rand() % anim.size()];
+				bool toRight = rand() % 2;
+
+				Position p(0, i * LANE_HEIGHT + LANE_HEIGHT / 2);
+				if (!toRight) p = Position(INGAME_WIDTH + e->getWidth(), i * LANE_HEIGHT + LANE_HEIGHT / 2);
+
+				entities.push_back(new Car(p, e, toRight));
 			}
 		}
 	}
@@ -171,9 +206,7 @@ public:
 		return height;
 	}
 	int getScore() const {
-		unsigned int sum = 0;
-		for (int i = 0; i < score.size(); ++i) sum += score[i];
-		return sum;
+		return score;
 	}
 
 	bool isLost() const {

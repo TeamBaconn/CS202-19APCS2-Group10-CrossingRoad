@@ -57,12 +57,12 @@ bool Car::Behavior(int rate, Level & level) {
 	int secondHalf = GetPos().x - getAni()->getWidth() / 2;
 	int botY = GetPos().y;
 	int topY = getAni()->getHeight();
-	if (secondHalf < level.getPlayer()->GetPos().x
+	/*if (secondHalf < level.getPlayer()->GetPos().x
 		&& level.getPlayer()->GetPos().x < firstHalf
 		&& botY>level.getPlayer()->GetPos().y
 		&& level.getPlayer()->GetPos().y > botY - topY) {
 		level.LooseGame();
-	}
+	}*/
 	if (toRight) return pos.x - animator->getWidth() / 2 > LANE_WIDTH;
 	else return pos.x + animator->getWidth() / 2 < 0; 
 }

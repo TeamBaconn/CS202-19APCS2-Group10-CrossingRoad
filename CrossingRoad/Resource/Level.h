@@ -74,6 +74,9 @@ public:
 	}
 	Level() = default;
 	Level(int lane, int mode) {
+		// debug
+		mode = 1;
+		lane = 2;
 		//Load resource
 		ifstream info;
 		info.open((string)ANIMATION + "/setting.txt");
@@ -105,11 +108,6 @@ public:
 	}
 	void CheckEntity() {
 		// check if player has won, to next level (mode)
-		if (entities.size() == 1) {
-			spawnRandom();
-			return;
-		}
-
 		for (int i = 0; i < entities.size(); i++)
 			if (entities[i] != player) {
 				if (entities[i]->Behavior(GAME_RATE, *this)) entities[i]->remove = true;
@@ -118,10 +116,12 @@ public:
 
 				// if win delete all Car instances
 				if (entities[i]->Behavior(GAME_RATE, *this)) {
-					++mode;
-					lane = lane + mode / 3;
-					SpawnArray = vector<int>(lane, 0);
+					for (int i = 0; i < lane - 1; ++i)
+						SpawnArray[i] = 0;
+					SpawnArray.push_back(0);
 
+					++mode;
+					lane = lane + 1;
 					score += 20;
 					checkPoint = 1;
 
@@ -129,10 +129,9 @@ public:
 						if (entities[i] != player && entities[i]->isCar()) entities[i]->remove = true;
 					break;
 				}
-
 				else if (entities[i]->GetPos().y > checkPoint * LANE_HEIGHT) {
-					++checkPoint;
 					score += 10;
+					++checkPoint;
 				}
 			}
 

@@ -48,7 +48,7 @@ void GameCore::UserInput() {
 		char c = _getch();
 
 		if (state != GameState::PLAYING) {
-			level = Level(10,10);
+			level = Level(2,1);
 			state = GameState::PLAYING;
 			continue;
 		}

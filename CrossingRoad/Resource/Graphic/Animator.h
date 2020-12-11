@@ -17,11 +17,13 @@ struct Frame {
 class Animator {
 private:
 	int id, width, set, speed;
+	//vector<Frame> animation_set;
 	vector<Frame> animation_set;
 public:
 	Animator() = default;
 	Animator(vector<Frame>& animation_set, int speed, int id, int width, int set) {
 		this->width = width;
+		//this->animation_set = animation_set;
 		this->animation_set = animation_set;
 		this->id = id;
 		this->set = set;

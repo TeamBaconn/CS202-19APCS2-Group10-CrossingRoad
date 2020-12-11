@@ -39,29 +39,6 @@ private:
 	vector<int> SpawnArray;
 public:
 	int& getMode() { return mode; }
-	Frame trim(Frame fr) {
-		int mintrim=999;
-		int maxtrim=0;
-		for (int i = 0; i < fr.key.size(); i++) {
-			for (int j = 0; j < fr.key[i].size(); j++) {
-				if (fr.key[i][j] != ' ' && j < mintrim) {
-					mintrim = j;
-					break;
-				}
-			}
-			for (int j = fr.key[i].size() - 1; j >= 0; j--) {
-				if (fr.key[i][j] != ' ' && j < maxtrim) {
-					maxtrim = j;
-					break;
-				}
-			}
-		}
-		for (int i = 0; i < fr.key.size(); i++) {
-			fr.key[i].erase(0, mintrim - 1);
-			fr.key[i].erase(maxtrim + 1, fr.key[i].size() - 1);
-		}
-		return fr;
-	}
 	Level() = default;
 	Level(int lane, int mode) : score(lane + 1, 0) {
 		mode = 1;

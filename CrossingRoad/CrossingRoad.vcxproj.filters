@@ -28,6 +28,9 @@
     <Filter Include="Source Files\Menu">
       <UniqueIdentifier>{25d547cc-2486-495b-a575-91341339c9b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Animator">
+      <UniqueIdentifier>{862a0d82-3e9f-46a4-ae8c-4653a0c14399}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Resource\main.cpp">
@@ -41,6 +44,9 @@
     </ClCompile>
     <ClCompile Include="Resource\Graphic\Graphic.cpp">
       <Filter>Source Files\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Graphic\Animator.cpp">
+      <Filter>Source Files\Animator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +64,9 @@
     </ClInclude>
     <ClInclude Include="Resource\Menu.h">
       <Filter>Source Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Graphic\Animator.h">
+      <Filter>Source Files\Animator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

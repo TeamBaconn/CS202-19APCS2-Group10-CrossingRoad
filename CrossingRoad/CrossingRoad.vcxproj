@@ -21,12 +21,14 @@
   <ItemGroup>
     <ClCompile Include="Resource\Entity\Entity.cpp" />
     <ClCompile Include="Resource\GameCore.cpp" />
+    <ClCompile Include="Resource\Graphic\Animator.cpp" />
     <ClCompile Include="Resource\Graphic\Graphic.cpp" />
     <ClCompile Include="Resource\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource\Entity\Entity.h" />
     <ClInclude Include="Resource\GameCore.h" />
+    <ClInclude Include="Resource\Graphic\Animator.h" />
     <ClInclude Include="Resource\Graphic\Graphic.h" />
     <ClInclude Include="Resource\Level.h" />
     <ClInclude Include="Resource\Menu.h" />

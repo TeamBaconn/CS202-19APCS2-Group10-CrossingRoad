@@ -44,11 +44,7 @@ private:
 	//Lane
 	vector<int> SpawnArray;
 public:
-	int getScore() {
-		unsigned int sum = 0;
-		for (auto& i : score) sum += i;
-		return sum;
-	}
+	
 	int& getMode() { return mode; }
 	void ReplaceAll(string& c, char f, char t) {
 		for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
@@ -102,7 +98,9 @@ public:
 		return new Animator(frame, speed, id, max, set);
 	}
 	Level() = default;
-	Level(int lane, int mode) :score(lane + 1) {
+	Level(int lane, int mode) :score(lane + 1, 0) {
+		mode = 1;
+		lane = 2;
 		//Load resource
 		ifstream info;
 		info.open((string)ANIMATION + "/setting.txt");
@@ -146,14 +144,18 @@ public:
 			else if (entities[i] == player) {
 
 				unsigned int pos = find(score.begin(), score.end(), 0) - score.begin();
-
+				pos = pos ? pos : 1;
 				if (entities[i]->GetPos().y > pos * LANE_HEIGHT) {
 					score[pos] = 10;
 				}
 
 				// if win delete all Car instances
 				if (entities[i]->Behavior(GAME_RATE, *this)) {
-					score[(score.size() - 1)] = 20;
+					for (int i = 0; i < score.size() - 1; ++i) {
+						score[(score.size() - 1)] += score[i];
+						score[i] = 0;
+					}
+					score[(score.size() - 1)] += 20;
 					for (int i = 0; i < entities.size(); ++i)
 						if (entities[i] != player && entities[i]->isCar()) entities[i]->remove = true;
 					break;
@@ -225,6 +227,11 @@ public:
 
 	int getHeight() const {
 		return height;
+	}
+	int getScore() const {
+		unsigned int sum = 0;
+		for (int i = 0; i < score.size(); ++i) sum += score[i];
+		return sum;
 	}
 
 	bool isLost() const {

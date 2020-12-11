@@ -42,6 +42,8 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 	char** map = Level::reset(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	if (state == GameState::PLAYING) {
+		string score = to_string(level.getScore());
+		for (int i = 0; i < score.length(); i++) map[INGAME_WIDTH + 20 + i][10] = score[i];
 		//Sort entities
 		vector<Entity*> entities = level.getEntities();
 		qSort(entities, 0, entities.size() - 1);
@@ -52,6 +54,7 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 		for (int i = 0; i < INGAME_WIDTH; i++)
 			for (int j = 0; j < INGAME_HEIGHT; j++)
 				draw(map, i, j, ingame, i + x, j + y, level);
+
 
 		Level::deleteMap(ingame, level.getWidth());
 		for (int i = 0; i < entities.size(); i++) {

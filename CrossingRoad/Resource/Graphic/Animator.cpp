@@ -41,7 +41,18 @@ void righttrim(Frame& fr) {
 	}
 
 }
-
+Frame revFrame(Frame fr) {
+	for (int j = 0; j < fr.key.size(); j++) {
+		reverse(fr.key[j].begin(), fr.key[j].end());
+		for (int i = 0; i < fr.key[j].size(); i++) {
+			if (fr.key[j][i] == '\\') fr.key[j][i] = '\/';
+			else if (fr.key[j][i] == '\/') fr.key[j][i] = '\\';
+			else if (fr.key[j][i] == ')') fr.key[j][i] = '(';
+			else if (fr.key[j][i] == '(') fr.key[j][i] = ')';
+		}
+	}
+	return fr;
+}
 void ReplaceAll(string& c, char f, char t)
 {
 	for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
@@ -56,7 +67,9 @@ Animator* readAnimator(string path, int id)
 	info >> speed >> set;
 	info.ignore();
 	vector<Frame> frame;
+	vector<Frame> revframe;
 	Frame kc;
+	Frame rev;
 	int max = -1;
 	while (!info.eof()) {
 		getline(info, k);
@@ -65,12 +78,15 @@ Animator* readAnimator(string path, int id)
 		if (k == "X") {
 			lefttrim(kc);
 			righttrim(kc);
+			rev =revFrame(kc);
 			frame.push_back(kc);
+			revframe.push_back(rev);
 			kc = *new Frame();
+			rev = *new Frame();
 			continue;
 		}
 		kc.key.push_back(k);
 	}
 	//trim(kc);
-	return new Animator(frame, speed, id, max, set);
+	return new Animator(frame,revframe, speed, id, max, set);
 }

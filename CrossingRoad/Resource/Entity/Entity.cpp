@@ -19,6 +19,11 @@ Position Position::operator+(const Position & p) {
 	return tmp;
 }
 
+void Position::operator=(const Position & p) {
+	this->x = p.x;
+	this->y = p.y;
+}
+
 //Entity
 Entity::~Entity() = default;
 
@@ -42,10 +47,12 @@ Entity::Entity(Position pos, Animator * animator) {
 Car::Car() : Entity() {}
 
 Car::Car(Position pos, Animator * animator) : Entity(pos, animator) {}
+Car::Car(Position pos, Animator * animator, bool toRight) : Entity(pos, animator), toRight(toRight) {}
 
 bool Car::Behavior(int rate, Level & level) {
 	Entity::Behavior(rate, level);
-	Move(Position(1, 0));
+	if (toRight) Move(Position(1, 0));
+	else Move(Position(-1, 0));
 	int firstHalf = GetPos().x + getAni()->getWidth() / 2;
 	int secondHalf = GetPos().x - getAni()->getWidth() / 2;
 	int botY = GetPos().y;
@@ -56,7 +63,8 @@ bool Car::Behavior(int rate, Level & level) {
 		&& level.getPlayer()->GetPos().y > botY - topY) {
 		level.LooseGame();
 	}
-	return pos.x - animator->getWidth() / 2 > LANE_WIDTH;
+	if (toRight) return pos.x - animator->getWidth() / 2 > LANE_WIDTH;
+	else return pos.x + animator->getWidth() / 2 < 0; 
 }
 
 bool Car::isCar()
@@ -72,7 +80,6 @@ Player::Player(Position pos, Animator * animator) : Entity(pos, animator) {}
 bool Player::Behavior(int rate, Level & lvl) {
 	Entity::Behavior(rate, lvl);
 	if (pos.y > lvl.getHeight()) {
-		++lvl.getMode();
 		pos.x = LANE_WIDTH / 2;
 		pos.y = 3;
 		return true;

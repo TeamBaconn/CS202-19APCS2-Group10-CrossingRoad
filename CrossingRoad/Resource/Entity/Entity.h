@@ -86,6 +86,7 @@ public:
 	~Position();
 
 	Position operator+(const Position& p);
+	void operator=(const Position& p);
 };
 
 class Entity {
@@ -127,8 +128,11 @@ public:
 // 1
 class Car : public Entity {
 public:
+	bool toRight;
 	Car();
 	Car(Position pos, Animator* animator);
+	Car(Position pos, Animator* animator, bool toRight);
+
 	bool Behavior(int rate, Level& level);
 	bool isCar();
 };

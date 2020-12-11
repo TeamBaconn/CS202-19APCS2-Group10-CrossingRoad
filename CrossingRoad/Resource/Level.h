@@ -121,7 +121,9 @@ public:
 					SpawnArray.push_back(0);
 
 					++mode;
-					lane = lane + 1;
+					lane = lane + mode / 3;
+					width = LANE_WIDTH;
+					height = lane * LANE_HEIGHT;
 					score += 20;
 					checkPoint = 1;
 

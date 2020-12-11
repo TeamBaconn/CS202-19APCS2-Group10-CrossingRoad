@@ -1,14 +1,7 @@
 #include "GameCore.h"
 
-template<typename Base, typename T>
-inline bool instanceof(const T*) {
-	return is_base_of<Base, T>::value;
-}
-
 GameCore::GameCore() {
 	this->state = GameState::MENU;
-	//Load du lieu nguoi choi
-	//level = Level(10,1);
 }
 void resizeConsole(int width, int height)
 {
@@ -33,11 +26,12 @@ void HideCursor()
 }
 void GameCore::GameBehavior() {
 	while (1) {
+		Sleep(GAME_RATE);
+		menu.push(GAME_RATE);
 		if (state != GameState::PLAYING) continue;
 		if (level.isLost()) {
 			state = GameState::MENU;
 		}
-		Sleep(GAME_RATE);
 		level.CheckEntity();
 	}
 }
@@ -83,14 +77,31 @@ void GameCore::Start() {
 	t2.join();
 	t3.join();
 }
+void SetColor(int ForgC, int back)
+{
+	WORD wColor;
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+	if (GetConsoleScreenBufferInfo(hStdOut, &csbi))
+	{
+		wColor = (csbi.wAttributes & 0xF0) + (ForgC & 0x0F);
+		SetConsoleTextAttribute(hStdOut, wColor);
+	}
+	return;
+}
 void GameCore::DrawGame() {
 	char** old = nullptr;
 	while (1) {
 		char** map = graphic.getDrawableMap(level,state);
+
+		graphic.drawMenu(map, menu, state);
+
 		for (int i = 0; i < SCREEN_WIDTH; i++) {
 			for (int j = 0; j < SCREEN_HEIGHT; j++) {
 				if (old != nullptr && old[i][j] == map[i][j]) continue;
 				GotoXY(i, j);
+				//SetColor(11,10);
 				putchar(map[i][j]);
 			}
 		}

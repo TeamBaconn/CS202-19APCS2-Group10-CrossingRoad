@@ -88,5 +88,5 @@ Animator* readAnimator(string path, int id)
 		kc.key.push_back(k);
 	}
 	//trim(kc);
-	return new Animator(frame,revframe, speed, id, max, set);
+	return new Animator(frame, revframe, speed, id, max, set);
 }

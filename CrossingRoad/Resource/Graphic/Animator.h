@@ -17,14 +17,13 @@ struct Frame {
 class Animator {
 private:
 	int id, width, set, speed;
-	//vector<Frame> animation_set;
-	vector<Frame> animation_set;
+	vector<Frame> animation_set,animation_set_reverse;
 public:
 	Animator() = default;
-	Animator(vector<Frame>& animation_set, int speed, int id, int width, int set) {
+	Animator(vector<Frame>& animation_set, vector<Frame>& animation_set_reverse, int speed, int id, int width, int set) {
 		this->width = width;
-		//this->animation_set = animation_set;
 		this->animation_set = animation_set;
+		this->animation_set_reverse = animation_set_reverse;
 		this->id = id;
 		this->set = set;
 		this->speed = speed;
@@ -45,9 +44,11 @@ private:
 	int k, current_time, base, lim, refresh;
 	Animator* animator;
 public:
+	bool reverse;
 	AnimatorData() = default;
 	AnimatorData(Animator* animator) {
 		this->animator = animator;
+		reverse = false;
 		k = 0;
 		current_time = 0;
 		refresh = 0;
@@ -76,7 +77,7 @@ public:
 			}
 			k = base;
 		}
-		return animator->animation_set[k];
+		return reverse ? animator->animation_set_reverse[k] : animator->animation_set[k];
 	}
 };
 void ReplaceAll(string& c, char f, char t);

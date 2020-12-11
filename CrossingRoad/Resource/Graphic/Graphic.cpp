@@ -1,11 +1,11 @@
 #include "Graphic.h"
 
 void draw(char** map, int x, int y,
-	char** pref, int dx, int dy, const Level& level) {
+	char** pref, int dx, int dy, int width, int height) {
 	if (x < 0 || x >= INGAME_WIDTH
 		|| y < 0 || y >= INGAME_HEIGHT) return;
-	if (dx < 0 || dx >= level.getWidth()
-		|| dy < 0 || dy >= level.getHeight()) return;
+	if (dx < 0 || dx >= width
+		|| dy < 0 || dy >= height) return;
 	if (pref[dx][dy] == '!') return;
 	map[x][y] = pref[dx][dy];
 }
@@ -38,27 +38,46 @@ void Graphic::qSort(vector<Entity*>& values, int low, int high) {
 	}
 }
 
+void Graphic::drawMenu(char**& map, Menu& menu, const GameState& state) {
+	vector<AnimatorData>& data = menu.getList();
+	Frame frame = data[0].getFrame();
+	for (int i = 0; i < frame.key.size(); i++)
+		for (int j = 0; j < frame.key[i].length(); j++) 
+			if(frame.key[i][j] != '!')
+			map[j+INGAME_WIDTH+5][i+9] = frame.key[i][j];
+	
+	if (state != GameState::MENU) return;
+	frame = data[1].getFrame();
+	for (int i = 0; i < frame.key.size(); i++)
+		for (int j = 0; j < frame.key[i].length(); j++)
+			if (frame.key[i][j] != '!')
+				map[40+j][i+5] = frame.key[i][j];
+
+	string score = "I need to take a break, can you help me guide these passengers?";
+	for (int i = 0; i < score.length(); i++) map[44+i][8] = score[i];
+}
+
 char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 	char** map = Level::reset(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-
-
 	if (state == GameState::PLAYING) {
-		string score = to_string(level.getScore());
-		for (int i = 0; i < score.length(); i++) map[INGAME_WIDTH + 20 + i][10] = score[i];
+		int width = level.getWidth(), height = level.getHeight();
+
+		string score = "Score: "+to_string(level.getScore());
+		for (int i = 0; i < score.length(); i++) map[INGAME_WIDTH + 20 + i][6] = score[i];
 		//Sort entities
 		vector<Entity*> entities = level.getEntities();
 		qSort(entities, 0, entities.size() - 1);
 		//Draw game scene
 		int x = CAM_LOCK_X ? 0 : (int)level.getPlayer()->pos.x - INGAME_WIDTH / 2;
 		int y = CAM_LOCK_Y ? 0 : (int)level.getPlayer()->pos.y - INGAME_HEIGHT / 2;
-		char** ingame = level.generateMap();
+		char** ingame = level.generateMap(width,height);
 		for (int i = 0; i < INGAME_WIDTH; i++)
 			for (int j = 0; j < INGAME_HEIGHT; j++)
-				draw(map, i, j, ingame, i + x, j + y, level);
+				draw(map, i, j, ingame, i + x, j + y, width,height);
 
 
-		Level::deleteMap(ingame, level.getWidth());
+		Level::deleteMap(ingame, width);
 		for (int i = 0; i < entities.size(); i++) {
 			Frame key = entities[i]->data.getFrame();
 			Position pos(entities[i]->pos.x - entities[i]->animator->getWidth() / 2
@@ -71,8 +90,8 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 				}
 			}
 			//For debug
-			drawC(map, entities[i]->pos.x - x, entities[i]->pos.y - y, '0' + i);
-			drawC(map, pos.x - x, pos.y - y, 'X');
+			//drawC(map, entities[i]->pos.x - x, entities[i]->pos.y - y, '0' + i);
+			//drawC(map, pos.x - x, pos.y - y, 'X');
 		}
 	}
 	return map;

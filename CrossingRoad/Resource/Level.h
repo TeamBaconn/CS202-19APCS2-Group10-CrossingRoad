@@ -24,6 +24,14 @@
 #include "Entity/Entity.h"
 #include <random>
 
+struct LaneInfo {
+	int time;
+	bool toRight;
+	LaneInfo(int time) {
+		this->time = time;
+		toRight = rand() % 2;
+	}
+};
 
 enum class GameState { MENU, PAUSE, PLAYING };
 
@@ -37,36 +45,8 @@ private:
 	int checkPoint = 1;
 	int score = 0;
 	//Lane
-	vector<int> SpawnArray;
+	vector<LaneInfo> SpawnArray;
 public:
-
-
-	void ReplaceAll(string& c, char f, char t) {
-		for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
-	}
-	Animator* readAnimator(string path, int id) {
-		ifstream info((string)ANIMATION + "/" + path);
-		if (!info.is_open()) return nullptr;
-		int speed, set;
-		string k;
-		info >> speed >> set;
-		info.ignore();
-		vector<Frame> frame;
-		Frame kc;
-		int max = -1;
-		while (!info.eof()) {
-			getline(info, k);
-			ReplaceAll(k, ' ', '!');//Set background opacity to 0
-			if (max == -1 || max < k.length()) max = k.length();
-			if (k == "X") {
-				frame.push_back(kc);
-				kc = *new Frame();
-				continue;
-			}
-			kc.key.push_back(k);
-		}
-		return new Animator(frame, speed, id, max, set);
-	}
 	Level() = default;
 	Level(int lane, int mode) {
 		// debug
@@ -92,32 +72,31 @@ public:
 		//Spawn
 		player = new Player
 		(Position(LANE_WIDTH / 2, 2), getAnimation(HUMAN_ID)[0]);
+
 		Animator* house = getAnimation(3)[0];
 		entities.push_back(new Prop(Position(house->getWidth() / 2, 5), house));
 
-		for (int i = 1; i < lane; i++) SpawnArray.push_back(0);
+		for (int i = 1; i < lane; i++) SpawnArray.push_back(LaneInfo(0));
 
 		// quai vat initialize
 		srand(time(NULL));
 		entities.push_back(player);
 	}
 	void CheckEntity() {
-		// check if player has won, to next level (mode)
 		for (int i = 0; i < entities.size(); i++)
 			if (entities[i] != player) {
 				if (entities[i]->Behavior(GAME_RATE, *this)) entities[i]->remove = true;
 			}
 			else if (entities[i] == player) {
-
 				// if win delete all Car instances
 				if (entities[i]->Behavior(GAME_RATE, *this)) {
-					for (int i = 0; i < lane - 1; ++i)
-						SpawnArray[i] = 0;
-					SpawnArray.push_back(0);
-
 					++mode;
 					if (mode % 3)
 						++lane;
+
+					SpawnArray.clear();
+					for (int i = 1; i < lane; i++) SpawnArray.push_back(LaneInfo(0));
+
 					width = LANE_WIDTH;
 					height = lane * LANE_HEIGHT;
 					score += 20;
@@ -133,6 +112,7 @@ public:
 				}
 			}
 
+		//This code to remove entity
 		int s = entities.size();
 		for (int i = s - 1; i >= 0; --i) {
 			if (entities[i]->remove)
@@ -141,19 +121,18 @@ public:
 		spawnRandom();
 	}
 	void spawnRandom() {
-		for (int i = 1; i < lane; ++i) {
-			SpawnArray[i - 1] -= GAME_RATE;
-			if (SpawnArray[i - 1] < 0) {
-				SpawnArray[i - 1] = MIN_SPAWN_TIME + rand() % (SPAN_TIME / mode);
+		for (int i = 0; i < SpawnArray.size(); ++i) {
+			SpawnArray[i].time -= GAME_RATE;
+			if (SpawnArray[i].time < 0) {
+				SpawnArray[i].time = MIN_SPAWN_TIME + rand() % (SPAN_TIME / mode);
 				vector<Animator*> anim = getAnimation(CAR_ID);
 
 				Animator* e = anim[rand() % anim.size()];
-				bool toRight = rand() % 2;
 
-				Position p(0, i * LANE_HEIGHT + LANE_HEIGHT / 2);
-				if (!toRight) p = Position(INGAME_WIDTH + e->getWidth(), i * LANE_HEIGHT + LANE_HEIGHT / 2);
+				Position p(0, (i+1) * LANE_HEIGHT + LANE_HEIGHT / 2);
+				if (!SpawnArray[i].toRight) p = Position(INGAME_WIDTH + e->getWidth(), (i+1) * LANE_HEIGHT + LANE_HEIGHT / 2);
 
-				entities.push_back(new Car(p, e, toRight));
+				entities.push_back(new Car(p, e, !SpawnArray[i].toRight));
 			}
 		}
 	}
@@ -169,7 +148,7 @@ public:
 			if (anim_list[i]->id == type) list.emplace_back(anim_list[i]);
 		return list;
 	}
-	char** generateMap() const {
+	char** generateMap(int width, int height) const {
 		char** map = reset(width, height);
 		for (int i = 0; i < width; i++)
 			for (int j = 0; j < height; j++)

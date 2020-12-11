@@ -35,9 +35,6 @@ Position Entity::Move(Position pos) {
 Entity::Entity() {
 	pos = Position(0, 0);
 }
-void ReplaceAll(string & c, char f, char t) {
-	for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
-}
 Entity::Entity(Position pos, Animator * animator) {
 	this->pos = pos;
 	this->animator = animator;

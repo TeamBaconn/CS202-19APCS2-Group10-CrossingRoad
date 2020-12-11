@@ -1,9 +1,5 @@
 #ifndef LEVEL_H_INCLUDED
 #define LEVEL_H_INCLUDED
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <vector>
 #include <Windows.h>
 #include <time.h>
 
@@ -25,8 +21,6 @@
 #define INGAME_WIDTH 120
 #define INGAME_HEIGHT 30
 
-#define ANIMATION "./Resource/Animation/"
-
 #include "Entity/Entity.h"
 #include <random>
 
@@ -45,6 +39,7 @@ private:
 	//Lane
 	vector<int> SpawnArray;
 public:
+
 
 	void ReplaceAll(string& c, char f, char t) {
 		for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
@@ -195,8 +190,8 @@ public:
 	}
 	static void deleteMap(char** old, int width) {
 		if (old == nullptr) return;
-		for (int i = 0; i < width; i++) delete old[i];
-		delete old;
+		for (int i = 0; i < width; i++) delete[] old[i];
+		delete[] old;
 	}
 
 	vector<Entity*> getEntities() const {

@@ -41,6 +41,8 @@ void Graphic::qSort(vector<Entity*>& values, int low, int high) {
 char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 	char** map = Level::reset(SCREEN_WIDTH, SCREEN_HEIGHT);
 
+
+
 	if (state == GameState::PLAYING) {
 		string score = to_string(level.getScore());
 		for (int i = 0; i < score.length(); i++) map[INGAME_WIDTH + 20 + i][10] = score[i];
@@ -69,8 +71,8 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 				}
 			}
 			//For debug
-			//drawC(map, entities[i]->pos.x - x, entities[i]->pos.y - y, '0' + i);
-			//drawC(map, pos.x - x, pos.y - y, 'X');
+			drawC(map, entities[i]->pos.x - x, entities[i]->pos.y - y, '0' + i);
+			drawC(map, pos.x - x, pos.y - y, 'X');
 		}
 	}
 	return map;

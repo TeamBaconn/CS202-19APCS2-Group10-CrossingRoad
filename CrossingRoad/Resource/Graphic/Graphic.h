@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "../Level.h"
+#include "../Menu.h"
 
 using namespace std;
 class Graphic {

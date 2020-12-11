@@ -38,10 +38,17 @@ void Graphic::qSort(vector<Entity*>& values, int low, int high) {
 	}
 }
 
+void Graphic::drawMenu(char**& map, Menu& menu) {
+	vector<AnimatorData>& data = menu.getList();
+	Frame frame = data[0].getFrame();
+	for (int i = 0; i < frame.key.size(); i++)
+		for (int j = 0; j < frame.key[i].length(); j++) 
+			if(frame.key[i][j] != '!')
+			map[j+INGAME_WIDTH+20][i+9] = frame.key[i][j];
+}
+
 char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 	char** map = Level::reset(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-
 
 	if (state == GameState::PLAYING) {
 		string score = to_string(level.getScore());

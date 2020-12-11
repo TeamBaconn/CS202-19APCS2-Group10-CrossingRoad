@@ -19,6 +19,7 @@ public:
 	
 	void qSort(vector<Entity*>& values, int low, int high);
 	vector<Entity*> sort(vector<Entity*> values);
+	void drawMenu(char**& map, Menu& menu);
 	char** getDrawableMap(const Level& level, const GameState& state);
 };
 void GotoXY(int x, int y);

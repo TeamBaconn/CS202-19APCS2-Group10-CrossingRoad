@@ -33,11 +33,12 @@ void HideCursor()
 }
 void GameCore::GameBehavior() {
 	while (1) {
+		Sleep(GAME_RATE);
+		menu.push(GAME_RATE);
 		if (state != GameState::PLAYING) continue;
 		if (level.isLost()) {
 			state = GameState::MENU;
 		}
-		Sleep(GAME_RATE);
 		level.CheckEntity();
 	}
 }
@@ -87,6 +88,9 @@ void GameCore::DrawGame() {
 	char** old = nullptr;
 	while (1) {
 		char** map = graphic.getDrawableMap(level,state);
+
+		graphic.drawMenu(map, menu);
+
 		for (int i = 0; i < SCREEN_WIDTH; i++) {
 			for (int j = 0; j < SCREEN_HEIGHT; j++) {
 				if (old != nullptr && old[i][j] == map[i][j]) continue;

@@ -5,7 +5,9 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+
 #include "Graphic/Graphic.h"
+
 #include <conio.h>
 #include <thread>
 
@@ -17,6 +19,7 @@ private:
 	GameState state;
 	Graphic graphic;
 	Level level;
+	Menu menu;
 public:
 	GameCore();
 	~GameCore() {};

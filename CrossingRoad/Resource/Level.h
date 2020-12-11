@@ -73,11 +73,6 @@ public:
 		entities.push_back(player);
 	}
 	void CheckEntity() {
-		// check if player has won, to next level (mode)
-		if (entities.size() == 1) {
-			spawnRandom();
-			return;
-		}
 
 		for (int i = 0; i < entities.size(); i++)
 			if (entities[i] != player) {

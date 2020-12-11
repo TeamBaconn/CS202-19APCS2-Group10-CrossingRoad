@@ -6,8 +6,6 @@ car.txt
 car2.txt
 1
 car3.txt
-2
-menu_human_face.txt
 3
 house.txt
 1

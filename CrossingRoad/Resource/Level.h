@@ -121,7 +121,8 @@ public:
 					SpawnArray.push_back(0);
 
 					++mode;
-					lane = lane + mode / 3;
+					if (mode % 3)
+						++lane;
 					width = LANE_WIDTH;
 					height = lane * LANE_HEIGHT;
 					score += 20;

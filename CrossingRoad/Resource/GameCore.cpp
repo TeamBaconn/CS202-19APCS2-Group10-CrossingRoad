@@ -77,7 +77,7 @@ void GameCore::Start() {
 	t2.join();
 	t3.join();
 }
-void SetColor(int ForgC, int back)
+void SetColor(int ForgC)
 {
 	WORD wColor;
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -104,8 +104,13 @@ void GameCore::DrawGame() {
 				}
 				else if (map[i][j] == ' ') continue;
 				GotoXY(i, j);
-				//SetColor(11,10);
-				putchar(map[i][j]);
+				if (map[i][j] == 'G') {
+					SetColor(10);
+					putchar((char)220);
+				}else {
+					SetColor(15);
+					putchar(map[i][j]);
+				}
 			}
 		}
 		//Delete old map

@@ -48,7 +48,7 @@ private:
 	vector<LaneInfo> SpawnArray;
 public:
 	int getLane() const {
-		return lane;
+		return lane-1;
 	}
 	Level() = default;
 	Level(int lane, int mode) {

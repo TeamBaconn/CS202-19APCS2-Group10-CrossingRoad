@@ -79,11 +79,26 @@ public:
 		Animator* house = getAnimation(3)[0];
 		entities.push_back(new Prop(Position(house->getWidth() / 2, 5), house));
 
-		for (int i = 1; i < lane; i++) SpawnArray.push_back(LaneInfo(0));
+		ResetLane();
 
 		// quai vat initialize
 		srand(time(NULL));
 		entities.push_back(player);
+	}
+	void ResetLane() {
+		for (int i = 0; i < entities.size(); ++i)
+			if (entities[i] != player && entities[i]->isCar()) entities[i]->remove = true;
+
+		width = LANE_WIDTH;
+		height = lane * LANE_HEIGHT;
+
+		SpawnArray.clear();
+		for (int i = 1; i < lane; i++) {
+			LaneInfo info(0);
+			SpawnArray.push_back(info);
+			Position pos(info.toRight ? 3 : -3+width, i*LANE_HEIGHT+LANE_HEIGHT*4/5);
+			entities.push_back(new Light(pos,getAnimation(2)[0],nullptr));
+		}
 	}
 	void CheckEntity() {
 		for (int i = 0; i < entities.size(); i++)
@@ -97,16 +112,11 @@ public:
 					if (mode % 3)
 						++lane;
 
-					SpawnArray.clear();
-					for (int i = 1; i < lane; i++) SpawnArray.push_back(LaneInfo(0));
+					ResetLane();
 
-					width = LANE_WIDTH;
-					height = lane * LANE_HEIGHT;
 					score += 20;
 					checkPoint = 1;
 
-					for (int i = 0; i < entities.size(); ++i)
-						if (entities[i] != player && entities[i]->isCar()) entities[i]->remove = true;
 					break;
 				}
 				else if (entities[i]->GetPos().y > checkPoint * LANE_HEIGHT) {

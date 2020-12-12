@@ -47,6 +47,9 @@ private:
 	//Lane
 	vector<LaneInfo> SpawnArray;
 public:
+	int getLane() const {
+		return SpawnArray.size();
+	}
 	Level() = default;
 	Level(int lane, int mode) {
 		// debug
@@ -167,10 +170,14 @@ public:
 		}
 		return map;
 	}
-	static void deleteMap(char** old, int width) {
+	static void deleteMap(char**& old, int width) {
 		if (old == nullptr) return;
-		for (int i = 0; i < width; i++) delete[] old[i];
+		for (int i = 0; i < width; i++) {
+			delete[] old[i];
+			old[i] = nullptr;
+		}
 		delete[] old;
+		old = nullptr;
 	}
 
 	vector<Entity*> getEntities() const {

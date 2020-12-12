@@ -83,7 +83,7 @@ bool Player::Behavior(int rate, Level & lvl) {
 		pos.y = 3;
 		return true;
 	}
-	return false;
+	return true;
 	//if (pos.x - width / 2 > maxwidth) pos.x = -width / 2;
 }
 

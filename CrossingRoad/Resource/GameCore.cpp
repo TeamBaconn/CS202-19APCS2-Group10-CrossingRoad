@@ -108,5 +108,6 @@ void GameCore::DrawGame() {
 		//Delete old map
 		Level::deleteMap(old, SCREEN_WIDTH);
 		old = map;
+		Sleep(GAME_RATE);
 	}
 }

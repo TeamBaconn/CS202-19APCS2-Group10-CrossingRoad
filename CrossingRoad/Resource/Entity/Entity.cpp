@@ -84,9 +84,16 @@ bool Player::Behavior(int rate, Level & lvl) {
 		return true;
 	}
 	return false;
-	//if (pos.x - width / 2 > maxwidth) pos.x = -width / 2;
 }
 
 Prop::Prop() : Entity() {}
 
 Prop::Prop(Position pos, Animator * animator) : Entity(pos, animator) {}
+
+Light::Light() { on = nullptr;  }
+
+Light::Light(Position pos, Animator* animator, bool* on) : Entity(pos, animator), on(on) {}
+
+bool Light::isCar() {
+	return true;
+}

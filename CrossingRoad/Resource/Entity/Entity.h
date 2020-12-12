@@ -77,4 +77,13 @@ public:
 	Prop();
 	Prop(Position pos, Animator* animator);
 };
+
+class Light : public Entity {
+private:
+	bool* on;
+public:
+	Light();
+	Light(Position pos, Animator* animator, bool* on);
+	bool isCar();
+};
 #endif // ENTITY_H_INCLUDED

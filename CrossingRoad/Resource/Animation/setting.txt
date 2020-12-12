@@ -10,3 +10,5 @@ car3.txt
 house.txt
 1
 dino.txt
+2
+traffic_light.txt

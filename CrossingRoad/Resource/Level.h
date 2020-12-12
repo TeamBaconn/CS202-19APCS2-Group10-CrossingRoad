@@ -47,6 +47,9 @@ private:
 	//Lane
 	vector<LaneInfo> SpawnArray;
 public:
+	int getLane() const {
+		return lane;
+	}
 	Level() = default;
 	Level(int lane, int mode) {
 		// debug
@@ -76,11 +79,26 @@ public:
 		Animator* house = getAnimation(3)[0];
 		entities.push_back(new Prop(Position(house->getWidth() / 2, 5), house));
 
-		for (int i = 1; i < lane; i++) SpawnArray.push_back(LaneInfo(0));
+		ResetLane();
 
 		// quai vat initialize
 		srand(time(NULL));
 		entities.push_back(player);
+	}
+	void ResetLane() {
+		for (int i = 0; i < entities.size(); ++i)
+			if (entities[i] != player && entities[i]->isCar()) entities[i]->remove = true;
+
+		width = LANE_WIDTH;
+		height = lane * LANE_HEIGHT;
+
+		SpawnArray.clear();
+		for (int i = 1; i < lane; i++) {
+			LaneInfo info(0);
+			SpawnArray.push_back(info);
+			Position pos(info.toRight ? 3 : -3+width, i*LANE_HEIGHT+LANE_HEIGHT*4/5);
+			entities.push_back(new Light(pos,getAnimation(2)[0],nullptr));
+		}
 	}
 	void CheckEntity() {
 		for (int i = 0; i < entities.size(); i++)
@@ -93,17 +111,12 @@ public:
 					++mode;
 					if (mode % 3)
 						++lane;
-
-					SpawnArray.clear();
-					for (int i = 1; i < lane; i++) SpawnArray.push_back(LaneInfo(0));
-
-					width = LANE_WIDTH;
-					height = lane * LANE_HEIGHT;
+					
+					ResetLane();
+					
 					score += 20;
 					checkPoint = 1;
 
-					for (int i = 0; i < entities.size(); ++i)
-						if (entities[i] != player && entities[i]->isCar()) entities[i]->remove = true;
 					break;
 				}
 				else if (entities[i]->GetPos().y > checkPoint * LANE_HEIGHT) {
@@ -167,10 +180,14 @@ public:
 		}
 		return map;
 	}
-	static void deleteMap(char** old, int width) {
+	static void deleteMap(char**& old, int width) {
 		if (old == nullptr) return;
-		for (int i = 0; i < width; i++) delete[] old[i];
+		for (int i = 0; i < width; i++) {
+			delete[] old[i];
+			old[i] = nullptr;
+		}
 		delete[] old;
+		old = nullptr;
 	}
 
 	vector<Entity*> getEntities() const {

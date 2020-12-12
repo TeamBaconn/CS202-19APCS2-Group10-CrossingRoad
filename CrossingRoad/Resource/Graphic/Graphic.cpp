@@ -75,7 +75,6 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 		for (int i = 0; i < INGAME_WIDTH; i++)
 			for (int j = 0; j < INGAME_HEIGHT; j++)
 				draw(map, i, j, ingame, i + x, j + y, width,height);
-				
 		/*oc cac fix
 		for (int i = 0; i < width; i++)
 			for (int j = 0; j < height; j++)

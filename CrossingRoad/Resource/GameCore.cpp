@@ -99,9 +99,11 @@ void GameCore::DrawGame() {
 
 		for (int i = 0; i < SCREEN_WIDTH; i++) {
 			for (int j = 0; j < SCREEN_HEIGHT; j++) {
-				if (old != nullptr && old[i][j] == map[i][j]) continue;
+				if (old != nullptr) {
+					if (old[i][j] == map[i][j]) continue;
+				}
+				else if (map[i][j] == ' ') continue;
 				GotoXY(i, j);
-				//SetColor(11,10);
 				putchar(map[i][j]);
 			}
 		}

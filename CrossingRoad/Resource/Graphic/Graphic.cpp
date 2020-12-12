@@ -71,19 +71,13 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 		//Draw game scene
 		int x = CAM_LOCK_X ? 0 : (int)level.getPlayer()->pos.x - INGAME_WIDTH / 2;
 		int y = CAM_LOCK_Y ? 0 : (int)level.getPlayer()->pos.y - INGAME_HEIGHT / 2;
-		char** ingame = level.generateMap(width,height);
-		for (int i = 0; i < INGAME_WIDTH; i++)
-			for (int j = 0; j < INGAME_HEIGHT; j++)
-				draw(map, i, j, ingame, i + x, j + y, width,height);
-		/*oc cac fix
+
 		for (int i = 0; i < width; i++)
 			for (int j = 0; j < height; j++)
 				if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
-					drawC(map, i+x, j+y, '#');
-		for (int i = 1; i < level.getLane(); i++)
-			for (int j = 0; j < width; j += LANE_DISTANCE) drawC(map, j + x, i*LANE_HEIGHT + y, '#'); 
-			*/
-		Level::deleteMap(ingame, width);
+					drawC(map, i-x, j-y, '#');
+		for (int i = 1; i <= level.getLane(); i++)
+			for (int j = 0; j < width; j += LANE_DISTANCE) drawC(map, j - x, i*LANE_HEIGHT - y, '-'); 
 		for (int i = 0; i < entities.size(); i++) {
 			Frame key = entities[i]->data.getFrame();
 			Position pos(entities[i]->pos.x - entities[i]->animator->getWidth() / 2

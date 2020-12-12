@@ -74,7 +74,7 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 		
 		for (int i = 0; i < width; i++)
 			for (int j = 0; j < height; j++)
-				if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
+				if (i == 0 || i == width - 1)
 					drawC(map, i-x, j-y, '#');
 		for (int i = 1; i <= level.getLane(); i++)
 			for (int j = 0; j < width; j += LANE_DISTANCE) drawC(map, j - x, i*LANE_HEIGHT - y, '-'); 

@@ -56,10 +56,12 @@ public:
 
 // 1
 class Car : public Entity {
+private:
+	int lane;
 public:
 	Car();
 	Car(Position pos, Animator* animator);
-	Car(Position pos, Animator* animator, bool toRight);
+	Car(Position pos, Animator* animator, int lane);
 
 	bool Behavior(int rate, Level& level);
 	bool isCar();
@@ -80,10 +82,11 @@ public:
 
 class Light : public Entity {
 private:
-	bool* on;
+	int lane;
 public:
 	Light();
-	Light(Position pos, Animator* animator, bool* on);
+	Light(Position pos, Animator* animator, int lane);
 	bool isCar();
+	bool Behavior(int rate, Level& level);
 };
 #endif // ENTITY_H_INCLUDED

@@ -21,15 +21,20 @@
 #define INGAME_WIDTH 120
 #define INGAME_HEIGHT 30
 
+#define TRAFFIC_TIME 3000
+
 #include "Entity/Entity.h"
 #include <random>
 
 struct LaneInfo {
-	int time;
+	int time, current_traffic;
 	bool toRight;
+	bool open;
 	LaneInfo(int time) {
 		this->time = time;
 		toRight = rand() % 2;
+		current_traffic = rand() % (TRAFFIC_TIME);
+		open = new bool(rand() % 2);
 	}
 };
 
@@ -85,6 +90,9 @@ public:
 		srand(time(NULL));
 		entities.push_back(player);
 	}
+	LaneInfo& getLane(int i) {
+		return SpawnArray[i];
+	}
 	void ResetLane() {
 		for (int i = 0; i < entities.size(); ++i)
 			if (entities[i] != player && entities[i]->isCar()) entities[i]->remove = true;
@@ -97,7 +105,7 @@ public:
 			LaneInfo info(0);
 			SpawnArray.push_back(info);
 			Position pos(info.toRight ? 3 : -3+width, i*LANE_HEIGHT+LANE_HEIGHT*4/5);
-			entities.push_back(new Light(pos,getAnimation(2)[0],nullptr));
+			entities.push_back(new Light(pos,getAnimation(2)[0],i-1));
 		}
 	}
 	void CheckEntity() {
@@ -135,7 +143,15 @@ public:
 	}
 	void spawnRandom() {
 		for (int i = 0; i < SpawnArray.size(); ++i) {
-			SpawnArray[i].time -= GAME_RATE;
+			SpawnArray[i].current_traffic += GAME_RATE;
+			//Turn traffic light
+			if (SpawnArray[i].current_traffic > TRAFFIC_TIME) {
+				SpawnArray[i].open = !SpawnArray[i].open;
+				SpawnArray[i].current_traffic = 0;
+			}
+			//Check if traffic light is open then start spawning time
+			if(SpawnArray[i].open) SpawnArray[i].time -= GAME_RATE;
+			//Spawn entity
 			if (SpawnArray[i].time < 0) {
 				SpawnArray[i].time = MIN_SPAWN_TIME + rand() % (SPAN_TIME / mode);
 				vector<Animator*> anim = getAnimation(CAR_ID);
@@ -145,7 +161,7 @@ public:
 				Position p(0, (i+1) * LANE_HEIGHT + LANE_HEIGHT / 2);
 				if (!SpawnArray[i].toRight) p = Position(INGAME_WIDTH + e->getWidth(), (i+1) * LANE_HEIGHT + LANE_HEIGHT / 2);
 
-				entities.push_back(new Car(p, e, !SpawnArray[i].toRight));
+				entities.push_back(new Car(p, e, i));
 			}
 		}
 	}

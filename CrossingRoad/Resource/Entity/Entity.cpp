@@ -43,15 +43,17 @@ Entity::Entity(Position pos, Animator * animator) {
 
 Car::Car() : Entity() {}
 
-Car::Car(Position pos, Animator * animator) : Entity(pos, animator) {}
-Car::Car(Position pos, Animator* animator, bool toRight) : Entity(pos, animator) {
-	data.reverse = toRight;
+Car::Car(Position pos, Animator* animator, int lane) : Entity(pos, animator) {
+	this->lane = lane;
 }
 
 bool Car::Behavior(int rate, Level & level) {
 	Entity::Behavior(rate, level);
-	if (!data.reverse) Move(Position(1, 0));
-	else Move(Position(-1, 0));
+	data.reverse = !level.getLane(lane).toRight;
+	if (level.getLane(lane).open) {
+		if (!data.reverse) Move(Position(1, 0));
+		else Move(Position(-1, 0));
+	}
 	int firstHalf = GetPos().x + getAni()->getWidth() / 2;
 	int secondHalf = GetPos().x - getAni()->getWidth() / 2;
 	int botY = GetPos().y;
@@ -90,10 +92,16 @@ Prop::Prop() : Entity() {}
 
 Prop::Prop(Position pos, Animator * animator) : Entity(pos, animator) {}
 
-Light::Light() { on = nullptr;  }
+Light::Light() = default;
 
-Light::Light(Position pos, Animator* animator, bool* on) : Entity(pos, animator), on(on) {}
+Light::Light(Position pos, Animator* animator, int lane) : Entity(pos, animator), lane(lane) {}
 
 bool Light::isCar() {
 	return true;
+}
+
+bool Light::Behavior(int rate, Level& lvl) {
+	Entity::Behavior(rate, lvl);
+	data.changeAnimation((!lvl.getLane(lane).open));
+	return false;
 }

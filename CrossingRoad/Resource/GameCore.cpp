@@ -107,7 +107,11 @@ void GameCore::DrawGame() {
 				if (map[i][j] == 'G') {
 					SetColor(10);
 					putchar((char)220);
-				}else {
+				}else if (map[i][j] == 'R') {
+					SetColor(4);
+					putchar((char)220);
+				}
+				else {
 					SetColor(15);
 					putchar(map[i][j]);
 				}
@@ -116,6 +120,5 @@ void GameCore::DrawGame() {
 		//Delete old map
 		Level::deleteMap(old, SCREEN_WIDTH);
 		old = map;
-		Sleep(GAME_RATE);
 	}
 }

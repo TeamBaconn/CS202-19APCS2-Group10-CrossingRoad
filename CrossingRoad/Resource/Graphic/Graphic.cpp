@@ -40,6 +40,7 @@ void Graphic::qSort(vector<Entity*>& values, int low, int high) {
 
 void Graphic::drawMenu(char**& map, Menu& menu, const GameState& state) {
 	vector<AnimatorData>& data = menu.getList();
+	data[0].reverse = state != GameState::MENU;
 	Frame frame = data[0].getFrame();
 	for (int i = 0; i < frame.key.size(); i++)
 		for (int j = 0; j < frame.key[i].length(); j++) 
@@ -81,7 +82,7 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 			
 		for (int i = 0; i < entities.size(); i++) {
 			Frame key = entities[i]->data.getFrame();
-			Position pos(entities[i]->pos.x - entities[i]->animator->getWidth() / 2
+			Position pos(entities[i]->pos.x - key.key[0].length() / 2
 				, entities[i]->pos.y - key.key.size());
 			for (int j = 0; j < key.key.size(); j++) {
 				for (int k = 0; k < key.key[j].length(); k++) {

@@ -47,11 +47,11 @@ public:
 	Position GetPos() const {
 		return pos;
 	}
-	Animator* getAni() {
-		return animator;
+	AnimatorData& getAnimatorData() {
+		return data;
 	}
-	friend class Graphic;
 	friend class Level;
+	friend class Graphic;
 };
 
 // 1

@@ -54,10 +54,10 @@ bool Car::Behavior(int rate, Level & level) {
 		if (!data.reverse) Move(Position(1, 0));
 		else Move(Position(-1, 0));
 	}
-	int firstHalf = GetPos().x + getAni()->getWidth() / 2;
-	int secondHalf = GetPos().x - getAni()->getWidth() / 2;
+	int firstHalf = GetPos().x + getAnimatorData().getWidth() / 2;
+	int secondHalf = GetPos().x - getAnimatorData().getWidth() / 2;
 	int botY = GetPos().y;
-	int topY = getAni()->getHeight();
+	int topY = getAnimatorData().getHeight();
 	if (secondHalf < level.getPlayer()->GetPos().x
 		&& level.getPlayer()->GetPos().x < firstHalf
 		&& botY>level.getPlayer()->GetPos().y

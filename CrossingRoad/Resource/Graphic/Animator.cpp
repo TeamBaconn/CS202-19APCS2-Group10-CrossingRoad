@@ -39,7 +39,6 @@ void righttrim(Frame& fr) {
 			fr.key[j].erase(maxtrim+1 , fr.key[j].size());
 		}
 	}
-
 }
 Frame revFrame(Frame fr) {
 	for (int j = 0; j < fr.key.size(); j++) {
@@ -70,11 +69,9 @@ Animator* readAnimator(string path, int id)
 	vector<Frame> revframe;
 	Frame kc;
 	Frame rev;
-	int max = -1;
 	while (!info.eof()) {
 		getline(info, k);
 		ReplaceAll(k, ' ', '!');//Set background opacity to 0
-		if (max == -1 || max < k.length()) max = k.length();
 		if (k == "X") {
 			lefttrim(kc);
 			righttrim(kc);
@@ -87,6 +84,5 @@ Animator* readAnimator(string path, int id)
 		}
 		kc.key.push_back(k);
 	}
-	//trim(kc);
-	return new Animator(frame, revframe, speed, id, max, set);
+	return new Animator(frame, revframe, speed, id, set);
 }

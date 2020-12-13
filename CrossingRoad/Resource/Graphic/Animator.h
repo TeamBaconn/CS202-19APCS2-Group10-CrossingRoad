@@ -16,25 +16,22 @@ struct Frame {
 };
 class Animator {
 private:
-	int id, width, set, speed;
+	int id, set, speed;
 	vector<Frame> animation_set,animation_set_reverse;
 public:
 	Animator() = default;
-	Animator(vector<Frame>& animation_set, vector<Frame>& animation_set_reverse, int speed, int id, int width, int set) {
-		this->width = width;
+	Animator(vector<Frame>& animation_set, vector<Frame>& animation_set_reverse, int speed, int id, int set) {
 		this->animation_set = animation_set;
 		this->animation_set_reverse = animation_set_reverse;
 		this->id = id;
 		this->set = set;
 		this->speed = speed;
 	}
-	int getWidth() {
-		return width;
-	}
-	int getHeight() {
-		return animation_set[0].key.size();
-	}
 	~Animator() = default;
+
+	int getWidth() {
+		return animation_set[0].key[0].size();
+	}
 
 	friend class Level;
 	friend class AnimatorData;
@@ -78,6 +75,12 @@ public:
 			k = base;
 		}
 		return reverse ? animator->animation_set_reverse[k] : animator->animation_set[k];
+	}
+	int getWidth() {
+		return getFrame().key.size();
+	}
+	int getHeight() {
+		return getFrame().key[0].size();
 	}
 };
 void ReplaceAll(string& c, char f, char t);

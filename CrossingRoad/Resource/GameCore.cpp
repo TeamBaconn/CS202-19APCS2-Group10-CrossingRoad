@@ -34,9 +34,12 @@ void GameCore::HandleInput(int c) {
 	switch (op.id) {
 	case LOAD_SAVE_REQUEST:
 		//Load save o day nay
+		level.loadLevel(op.value);
+		state = GameState::PLAYING;
 		break;
 	case SAVE_SAVE_REQUEST:
 		//Save save o day nay
+		level.saveLevel(op.value);
 		break;
 	case PLAY_REQUEST:
 		level = Level();

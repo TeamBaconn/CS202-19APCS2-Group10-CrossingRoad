@@ -199,3 +199,129 @@ int Level::getScore() const
 	return score;
 }
 
+void Level::outputAnimation(vector<Frame>& set, ofstream& fout, Entity* entity) {
+	int sSize = set.size();
+	fout << sSize << '\n';
+	for (int i = 0; i < sSize; ++i) {
+		int kSize = set[i].key.size();
+		fout << kSize << '\n';
+		for (int j = 0; j < kSize; ++j) {
+			fout << set[i].key[j] << '\n';
+		}
+	}
+}
+void Level::writeE2File(ofstream& fout, Entity* entity) {
+	int id = entity->getID();
+	fout << id << '\n';
+
+	fout << entity->pos.x << '\n';
+	fout << entity->pos.y << '\n';
+
+	// animator
+	fout << entity->animator->id << '\n';
+	fout << entity->animator->set << '\n';
+	fout << entity->animator->speed << '\n';
+
+	//
+	vector<Frame> set = entity->animator->animation_set;
+	outputAnimation(set, fout, entity);
+
+	set = entity->animator->animation_set_reverse;
+	outputAnimation(set, fout, entity);
+	// animator
+
+	fout << entity->remove << '\n';
+}
+void Level::inputAnimation(ifstream& fin, vector<Frame>& animation_set) {
+	Frame keys;
+
+	int sSize;
+	fin >> sSize;
+	for (int i = 0; i < sSize; ++i) {
+		int kSize;
+		fin >> kSize;
+		fin.ignore(123, '\n');
+		for (int j = 0; j < kSize; ++j) {
+			string key;
+			getline(fin, key);
+			keys.key.push_back(key);
+		}
+		animation_set.push_back(keys);
+		keys.key.clear();
+	}
+}
+void Level::readF2E(ifstream& fin, Entity*& entity) {
+	int id;
+	fin >> id;
+
+	Position pos;
+	fin >> pos.x;
+	fin >> pos.y;
+
+	// animator
+	Animator* temp = new Animator;
+
+	fin >> temp->id;
+	fin >> temp->set;
+	fin >> temp->speed;
+
+	vector<Frame> animation_set;
+	//
+	inputAnimation(fin, animation_set);
+	temp->animation_set = animation_set;
+
+	vector<Frame> animation_set_reverse;
+	inputAnimation(fin, animation_set_reverse);
+	temp->animation_set_reverse = animation_set_reverse;
+
+	int lane = pos.y / LANE_HEIGHT - 1;
+	if (id == HUMAN_ID) { entity = new Player(pos, temp); }
+	else if (id == CAR_ID) { entity = new Car(pos, temp, lane); }
+	else if (id == PROP_ID) { entity = new Prop(pos, temp); }
+	else if (id == LIGHT_ID) { entity = new Light(pos, temp, lane); }
+
+	fin >> entity->remove;
+}
+void Level::saveLevel(string name) {
+	ofstream fout("./Resource/Data/"+name+".txt");
+	if (fout) {
+		fout << lane << '\n';
+		fout << mode << '\n';
+		fout << score << '\n';
+
+		size_t esize = entities.size();
+		fout << esize << '\n';
+		writeE2File(fout, player);
+		for (int i = 0; i < esize; ++i) {
+			if (entities[i] != player) {
+				writeE2File(fout, entities[i]);
+			}
+		}
+
+		fout.close();
+	}
+}
+void Level::loadLevel(string name) {
+	ifstream fin("./Resource/Data/" + name + ".txt");
+	if (fin) {
+		fin >> lane;
+		fin >> mode;
+		fin >> score;
+		height = lane * LANE_HEIGHT;
+
+		size_t esize;
+		fin >> esize;
+		entities.clear();
+
+		Entity* temp = nullptr;
+		readF2E(fin, temp);
+		entities.push_back(temp);
+		player = temp;
+		for (int i = 1; i < esize; ++i) {
+			readF2E(fin, temp);
+			entities.push_back(temp);
+		}
+
+		fin.close();
+	}
+}

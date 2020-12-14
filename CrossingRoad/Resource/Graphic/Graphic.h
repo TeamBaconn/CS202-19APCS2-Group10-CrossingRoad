@@ -16,8 +16,7 @@ public:
 	Graphic();
 
 	~Graphic() {};
-	
-	void qSort(vector<Entity*>& values, int low, int high);
+
 	void drawMenu(char**& map, Menu& menu, const GameState& state);
 	char** getDrawableMap(const Level& level, const GameState& state);
 };

@@ -32,7 +32,7 @@ public:
 	~Entity();
 
 	//Functions
-	Position Move(Position pos);
+	virtual Position Move(Position pos);
 
 	virtual bool Behavior(int rate, Level& level) {
 		data.push(rate);
@@ -44,23 +44,23 @@ public:
 	void changeBase(int id) {
 		data.changeAnimation(id);
 	}
-	Position GetPos() const {
+	Position GetPosition() const {
 		return pos;
+	}
+	Animator* getAnimator() {
+		return animator;
 	}
 	AnimatorData& getAnimatorData() {
 		return data;
 	}
 	friend class Level;
-	friend class Graphic;
 };
 
-// 1
 class Car : public Entity {
 private:
 	int lane;
 public:
 	Car();
-	Car(Position pos, Animator* animator);
 	Car(Position pos, Animator* animator, int lane);
 
 	bool Behavior(int rate, Level& level);
@@ -72,6 +72,8 @@ public:
 	Player();
 	Player(Position pos, Animator* animator);
 	bool Behavior(int rate, Level& level);
+
+	Position Move(Position pos);
 };
 
 class Prop : public Entity {

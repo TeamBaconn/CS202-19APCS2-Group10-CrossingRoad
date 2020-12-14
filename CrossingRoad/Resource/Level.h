@@ -22,6 +22,7 @@
 #define INGAME_HEIGHT 30
 
 #define TRAFFIC_TIME 3000
+#define TRAFFIC_GAP 2000
 
 #include "Entity/Entity.h"
 #include <random>
@@ -57,9 +58,6 @@ public:
 	}
 	Level() = default;
 	Level(int lane, int mode) {
-		// debug
-		mode = 1;
-		lane = 2;
 		//Load resource
 		ifstream info;
 		info.open((string)ANIMATION + "/setting.txt");
@@ -127,7 +125,7 @@ public:
 
 					break;
 				}
-				else if (entities[i]->GetPos().y > checkPoint * LANE_HEIGHT) {
+				else if (entities[i]->GetPosition().y > checkPoint * LANE_HEIGHT) {
 					score += 10;
 					++checkPoint;
 				}
@@ -145,7 +143,7 @@ public:
 		for (int i = 0; i < SpawnArray.size(); ++i) {
 			SpawnArray[i].current_traffic += GAME_RATE;
 			//Turn traffic light
-			if (SpawnArray[i].current_traffic > TRAFFIC_TIME) {
+			if (SpawnArray[i].current_traffic > TRAFFIC_TIME + SpawnArray[i].open*TRAFFIC_GAP) {
 				SpawnArray[i].open = !SpawnArray[i].open;
 				SpawnArray[i].current_traffic = 0;
 			}

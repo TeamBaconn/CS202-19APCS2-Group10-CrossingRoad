@@ -54,14 +54,14 @@ bool Car::Behavior(int rate, Level & level) {
 		if (!data.reverse) Move(Position(1, 0));
 		else Move(Position(-1, 0));
 	}
-	int firstHalf = GetPos().x + getAnimatorData().getWidth() / 2;
-	int secondHalf = GetPos().x - getAnimatorData().getWidth() / 2;
-	int botY = GetPos().y;
-	int topY = getAnimatorData().getHeight();
-	if (secondHalf < level.getPlayer()->GetPos().x
-		&& level.getPlayer()->GetPos().x < firstHalf
-		&& botY>level.getPlayer()->GetPos().y
-		&& level.getPlayer()->GetPos().y > botY - topY) {
+	int firstHalf = GetPosition().x + getAnimatorData().getWidth() / 2;
+	int secondHalf = GetPosition().x - getAnimatorData().getWidth() / 2;
+	int botY = GetPosition().y;
+	int topY = GetPosition().y-getAnimatorData().getHeight();
+	if (secondHalf <= level.getPlayer()->GetPosition().x
+		&& level.getPlayer()->GetPosition().x <= firstHalf
+		&& botY>=level.getPlayer()->GetPosition().y
+		&& level.getPlayer()->GetPosition().y >= (botY + topY)/2) {
 		level.LooseGame();
 	}
 	if (!data.reverse) return pos.x - animator->getWidth() / 2 > LANE_WIDTH;
@@ -86,6 +86,14 @@ bool Player::Behavior(int rate, Level & lvl) {
 		return true;
 	}
 	return false;
+}
+
+Position Player::Move(Position pos) {
+	Position tmp(this->pos + pos);
+	if (tmp.x-getAnimator()->getWidth()/2 < 0 
+		|| tmp.y < 0 
+		|| tmp.x + getAnimator()->getWidth() / 2 > LANE_WIDTH) return this->pos;
+	return Entity::Move(pos);
 }
 
 Prop::Prop() : Entity() {}

@@ -61,9 +61,9 @@ Animator* readAnimator(string path, int id)
 {
 	ifstream info((string)ANIMATION + "/" + path);
 	if (!info.is_open()) return nullptr;
-	int speed, set;
+	int speed, set, off_set_y;
 	string k;
-	info >> speed >> set;
+	info >> speed >> set >> off_set_y;
 	info.ignore();
 	vector<Frame> frame;
 	vector<Frame> revframe;
@@ -84,5 +84,5 @@ Animator* readAnimator(string path, int id)
 		}
 		kc.key.push_back(k);
 	}
-	return new Animator(frame, revframe, speed, id, set);
+	return new Animator(frame, revframe, off_set_y, speed, id, set);
 }

@@ -3,27 +3,6 @@
 GameCore::GameCore() {
 	this->state = GameState::MENU;
 }
-void resizeConsole(int width, int height)
-{
-	HWND console = GetConsoleWindow();
-	RECT r;
-	GetWindowRect(console, &r);
-	MoveWindow(console, r.left, r.top, width, height, TRUE);
-}
-void FixConsoleWindow() {
-	HWND consoleWindow = GetConsoleWindow();
-	LONG style = GetWindowLong(consoleWindow, GWL_STYLE);
-	style = style & ~(WS_MAXIMIZEBOX) & ~(WS_THICKFRAME);
-	SetWindowLong(consoleWindow, GWL_STYLE, style);
-}
-void HideCursor()
-{
-	CONSOLE_CURSOR_INFO cursor;
-	cursor.bVisible = FALSE;
-	cursor.dwSize = sizeof(cursor);
-	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleCursorInfo(handle, &cursor);
-}
 void GameCore::GameBehavior() {
 	while (1) {
 		Sleep(GAME_RATE);
@@ -37,11 +16,11 @@ void GameCore::GameBehavior() {
 }
 void GameCore::UserInput() {
 	while (1) {
-		Sleep(50);
+		Sleep(GAME_RATE);
 		char c = _getch();
 
 		if (state != GameState::PLAYING) {
-			level = Level(2,1);
+			level = Level(5,2);
 			state = GameState::PLAYING;
 			continue;
 		}

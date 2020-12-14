@@ -1,19 +1,31 @@
 #include "Graphic.h"
 
-void draw(char** map, int x, int y,
-	char** pref, int dx, int dy, int width, int height) {
-	if (x < 0 || x >= INGAME_WIDTH
-		|| y < 0 || y >= INGAME_HEIGHT) return;
-	if (dx < 0 || dx >= width
-		|| dy < 0 || dy >= height) return;
-	if (pref[dx][dy] == '!') return;
-	map[x][y] = pref[dx][dy];
-}
 void drawC(char** map, int x, int y, char c) {
 	if (x < 0 || x >= INGAME_WIDTH
 		|| y < 0 || y >= INGAME_HEIGHT) return;
 	if (c == '!') return;
 	map[x][y] = c;
+}
+void resizeConsole(int width, int height)
+{
+	HWND console = GetConsoleWindow();
+	RECT r;
+	GetWindowRect(console, &r);
+	MoveWindow(console, r.left, r.top, width, height, TRUE);
+}
+void FixConsoleWindow() {
+	HWND consoleWindow = GetConsoleWindow();
+	LONG style = GetWindowLong(consoleWindow, GWL_STYLE);
+	style = style & ~(WS_MAXIMIZEBOX) & ~(WS_THICKFRAME);
+	SetWindowLong(consoleWindow, GWL_STYLE, style);
+}
+void HideCursor()
+{
+	CONSOLE_CURSOR_INFO cursor;
+	cursor.bVisible = FALSE;
+	cursor.dwSize = sizeof(cursor);
+	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorInfo(handle, &cursor);
 }
 void GotoXY(int x, int y) {
 	COORD coord;
@@ -21,13 +33,22 @@ void GotoXY(int x, int y) {
 	coord.Y = y;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
-Graphic::Graphic() = default;
 
-void Graphic::qSort(vector<Entity*>& values, int low, int high) {
+//Constructor
+Graphic::Graphic() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
+	FixConsoleWindow();
+	HideCursor();
+}
+
+void qSort(vector<Entity*>& values, int low, int high) {
 	if (low < high) {
 		int i = low - 1;
 		for (int j = low; j < high; ++j) {
-			if (values[j]->pos.y < values[high]->pos.y) {
+			if (values[j]->GetPosition().y - values[j]->getAnimator()->getOffSetY() 
+				< values[high]->GetPosition().y - values[high]->getAnimator()->getOffSetY()) {
 				++i;
 				swap(values[i], values[j]);
 			}
@@ -70,20 +91,16 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 		vector<Entity*> entities = level.getEntities();
 		qSort(entities, 0, entities.size() - 1);
 		//Draw game scene
-		int x = CAM_LOCK_X ? 0 : (int)level.getPlayer()->pos.x - INGAME_WIDTH / 2;
-		int y = CAM_LOCK_Y ? 0 : (int)level.getPlayer()->pos.y - INGAME_HEIGHT / 2;
-		
-		for (int i = 0; i < width; i++)
-			for (int j = 0; j < height; j++)
-				if (i == 0 || i == width - 1)
-					drawC(map, i-x, j-y, '#');
+		int x = CAM_LOCK_X ? 0 : (int)level.getPlayer()->GetPosition().x - INGAME_WIDTH / 2;
+		int y = CAM_LOCK_Y ? 0 : (int)level.getPlayer()->GetPosition().y - INGAME_HEIGHT / 2;
+
 		for (int i = 1; i <= level.getLane(); i++)
 			for (int j = 0; j < width; j += LANE_DISTANCE) drawC(map, j - x, i*LANE_HEIGHT - y, '-'); 
 			
 		for (int i = 0; i < entities.size(); i++) {
-			Frame key = entities[i]->data.getFrame();
-			Position pos(entities[i]->pos.x - key.key[0].length() / 2
-				, entities[i]->pos.y - key.key.size());
+			Frame key = entities[i]->getAnimatorData().getFrame();
+			Position pos(entities[i]->GetPosition().x - key.key[0].length() / 2
+				, entities[i]->GetPosition().y - key.key.size());
 			for (int j = 0; j < key.key.size(); j++) {
 				for (int k = 0; k < key.key[j].length(); k++) {
 					//Check its null character ! by default
@@ -91,8 +108,15 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 					drawC(map, pos.x + k - x, pos.y + j - y, c);
 				}
 			}
+
+			//Frame the game scene
+			for (int i = 0; i < width; i++)
+				for (int j = 0; j < height; j++)
+					if (i == 0 || i == width - 1)
+						drawC(map, i - x, j - y, '|');
+
 			//For debug
-			//drawC(map, entities[i]->pos.x - x, entities[i]->pos.y - y, '0' + i);
+			//drawC(map, entities[i]->GetPosition().x - x, entities[i]->GetPosition().y - y, '0' + i);
 			//drawC(map, pos.x - x, pos.y - y, 'X');
 		}
 	}

@@ -41,18 +41,14 @@ public:
 
 	virtual bool isCar() { return false; }
 
-	void changeBase(int id) {
-		data.changeAnimation(id);
-	}
+	void changeBase(int id);
 	Position GetPosition() const {
 		return pos;
 	}
 	Animator* getAnimator() {
 		return animator;
 	}
-	AnimatorData& getAnimatorData() {
-		return data;
-	}
+	AnimatorData& getAnimatorData();
 	friend class Level;
 };
 

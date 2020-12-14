@@ -48,6 +48,9 @@
     <ClCompile Include="Resource\Graphic\Animator.cpp">
       <Filter>Source Files\Animator</Filter>
     </ClCompile>
+    <ClCompile Include="Resource\Level.cpp">
+      <Filter>Source Files\Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource\GameCore.h">

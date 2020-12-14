@@ -36,6 +36,16 @@ void Entity::changeBase(int id) {
 	data.changeAnimation(id);
 }
 
+Position Entity::GetPosition() const
+{
+	return pos;
+}
+
+Animator* Entity::getAnimator()
+{
+	return animator;
+}
+
 AnimatorData& Entity::getAnimatorData() {
 	return data;
 }

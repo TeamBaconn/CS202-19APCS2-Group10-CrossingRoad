@@ -23,6 +23,7 @@
     <ClCompile Include="Resource\GameCore.cpp" />
     <ClCompile Include="Resource\Graphic\Animator.cpp" />
     <ClCompile Include="Resource\Graphic\Graphic.cpp" />
+    <ClCompile Include="Resource\Level.cpp" />
     <ClCompile Include="Resource\main.cpp" />
   </ItemGroup>
   <ItemGroup>

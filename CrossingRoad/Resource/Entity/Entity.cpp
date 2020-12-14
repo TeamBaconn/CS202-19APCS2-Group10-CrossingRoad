@@ -32,6 +32,18 @@ Position Entity::Move(Position pos) {
 	return this->pos;
 }
 
+void Entity::changeBase(int id) {
+	data.changeAnimation(id);
+}
+
+Position Entity::GetPos() const {
+	return pos;
+}
+
+AnimatorData& Entity::getAnimatorData() {
+	return data;
+}
+
 Entity::Entity() {
 	pos = Position(0, 0);
 }

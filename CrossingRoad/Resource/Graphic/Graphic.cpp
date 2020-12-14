@@ -1,8 +1,11 @@
 #include "Graphic.h"
 
-void drawC(char** map, int x, int y, char c) {
-	if (x < 0 || x >= INGAME_WIDTH
-		|| y < 0 || y >= INGAME_HEIGHT) return;
+void drawC(char** map, int x, int y, char c, bool InGame) {
+	if (InGame) {
+		if (x < 0 || x >= INGAME_WIDTH
+			|| y < 0 || y >= INGAME_HEIGHT) return;
+	}
+	else if (x < 0 || x >= SCREEN_WIDTH || y < 0 || y >= SCREEN_HEIGHT) return;
 	if (c == '!') return;
 	map[x][y] = c;
 }
@@ -34,6 +37,20 @@ void GotoXY(int x, int y) {
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+int DrawString(char** map, const string& c, int x, int y, int dx) {
+	int rx = 0;
+	for (int i = 0; i < c.length(); i++) {
+		if (rx == 0 && c[i] == ' ') continue;
+		drawC(map, rx+x, y, c[i], false);
+		rx++;
+		if (rx > dx) {
+			rx = 0;
+			y++;
+		}
+	}
+	return y;
+}
+
 //Constructor
 Graphic::Graphic() {
 	ios_base::sync_with_stdio(false);
@@ -59,24 +76,29 @@ void qSort(vector<Entity*>& values, int low, int high) {
 	}
 }
 
-void Graphic::drawMenu(char**& map, Menu& menu, const GameState& state) {
+void Graphic::drawMenu(char** map, Menu& menu, const GameState& state) {
 	vector<AnimatorData>& data = menu.getList();
-	data[0].reverse = state != GameState::MENU;
+	data[0].reverse = state == GameState::PLAYING;
 	Frame frame = data[0].getFrame();
 	for (int i = 0; i < frame.key.size(); i++)
 		for (int j = 0; j < frame.key[i].length(); j++) 
 			if(frame.key[i][j] != '!')
 			map[j+INGAME_WIDTH+5][i+9] = frame.key[i][j];
 	
-	if (state != GameState::MENU) return;
+	if (state == GameState::PLAYING) return;
 	frame = data[1].getFrame();
 	for (int i = 0; i < frame.key.size(); i++)
 		for (int j = 0; j < frame.key[i].length(); j++)
 			if (frame.key[i][j] != '!')
 				map[40+j][i+5] = frame.key[i][j];
 
-	string score = "I need to take a break, can you help me guide these passengers?";
-	for (int i = 0; i < score.length(); i++) map[44+i][8] = score[i];
+	int max_y = 7;
+	max_y = DrawString(map, menu.option->getTitle(), 44, max_y, 80) + 1;
+	for (int i = 0; i < menu.option->getLength(); i++) {
+		max_y = DrawString(map, 
+			(menu.option->getSelectIndex() == i ? ">> " : "") + menu.option->getOptions()[i]
+			, 44+OPTION_OFFSET_X, max_y+1, 80);
+	}
 }
 
 char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
@@ -86,7 +108,7 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 		int width = level.getWidth(), height = level.getHeight();
 
 		string score = "Score: "+to_string(level.getScore());
-		for (int i = 0; i < score.length(); i++) map[INGAME_WIDTH + 20 + i][6] = score[i];
+		DrawString(map, score, INGAME_WIDTH + 5, 6, 20);
 		//Sort entities
 		vector<Entity*> entities = level.getEntities();
 		qSort(entities, 0, entities.size() - 1);
@@ -95,7 +117,7 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 		int y = CAM_LOCK_Y ? 0 : (int)level.getPlayer()->GetPosition().y - INGAME_HEIGHT / 2;
 
 		for (int i = 1; i <= level.getLane(); i++)
-			for (int j = 0; j < width; j += LANE_DISTANCE) drawC(map, j - x, i*LANE_HEIGHT - y, '-'); 
+			for (int j = 0; j < width; j += LANE_DISTANCE) drawC(map, j - x, i*LANE_HEIGHT - y, '-', true); 
 			
 		for (int i = 0; i < entities.size(); i++) {
 			Frame key = entities[i]->getAnimatorData().getFrame();
@@ -105,7 +127,7 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 				for (int k = 0; k < key.key[j].length(); k++) {
 					//Check its null character ! by default
 					char c = key.key[j][k];
-					drawC(map, pos.x + k - x, pos.y + j - y, c);
+					drawC(map, pos.x + k - x, pos.y + j - y, c,true);
 				}
 			}
 
@@ -113,7 +135,7 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 			for (int i = 0; i < width; i++)
 				for (int j = 0; j < height; j++)
 					if (i == 0 || i == width - 1)
-						drawC(map, i - x, j - y, '|');
+						drawC(map, i - x, j - y, '|',true);
 
 			//For debug
 			//drawC(map, entities[i]->GetPosition().x - x, entities[i]->GetPosition().y - y, '0' + i);

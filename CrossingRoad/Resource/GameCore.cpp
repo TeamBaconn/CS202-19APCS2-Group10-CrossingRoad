@@ -14,14 +14,52 @@ void GameCore::GameBehavior() {
 		level.CheckEntity();
 	}
 }
+void GameCore::HandleInput(int c) {
+	switch (c) {
+	case 72:
+		menu.option->Navigate(-1);
+		return;
+	case 80:
+		menu.option->Navigate(1);
+		return;
+	case -32:
+		return;
+	}
+	OptionRequest op = menu.option->Select(c);
+	switch (op.id) {
+	case LOAD_SAVE_REQUEST:
+		//Load save o day nay
+		break;
+	case SAVE_SAVE_REQUEST:
+		//Save save o day nay
+		break;
+	case PLAY_REQUEST:
+		level = Level(5, 2);
+		state = GameState::PLAYING;
+		break;
+	case LOAD_REQUEST:
+		menu.option = new LoadOption();
+		break;
+	case BACK_MENU_REQUEST:
+		menu.option = new MenuOption();
+		break;
+	case CREDIT_REQUEST:
+		menu.option = new CreditOption();
+		break;
+	case RESUME_GAME:
+		state = GameState::PLAYING;
+		break;
+	case EXIT_REQUEST:
+		exit(0);
+	}
+}
 void GameCore::UserInput() {
 	while (1) {
 		Sleep(GAME_RATE);
 		char c = _getch();
 
-		if (state != GameState::PLAYING) {
-			level = Level(5,2);
-			state = GameState::PLAYING;
+ 		if (state != GameState::PLAYING) {
+			HandleInput(c);
 			continue;
 		}
 		Entity* player = level.player;
@@ -42,6 +80,9 @@ void GameCore::UserInput() {
 			player->Move(Position(2,0));
 			player->changeBase(1);
 			break;
+		case ESC:
+			this->state = GameState::PAUSE;
+			menu.option = new PauseOption();
 		}
 	}
 }
@@ -83,10 +124,10 @@ void GameCore::DrawGame() {
 				}
 				else if (map[i][j] == ' ') continue;
 				GotoXY(i, j);
-				if (map[i][j] == 'G') {
+				if (map[i][j] == 'G' && state == GameState::PLAYING) {
 					SetColor(10);
 					putchar((char)220);
-				}else if (map[i][j] == 'R') {
+				}else if (map[i][j] == 'R' && state == GameState::PLAYING) {
 					SetColor(4);
 					putchar((char)220);
 				}

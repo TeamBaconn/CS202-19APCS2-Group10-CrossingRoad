@@ -17,7 +17,7 @@ public:
 
 	~Graphic() {};
 
-	void drawMenu(char**& map, Menu& menu, const GameState& state);
+	void drawMenu(char** map, Menu& menu, const GameState& state);
 	char** getDrawableMap(const Level& level, const GameState& state);
 };
 void GotoXY(int x, int y);

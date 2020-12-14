@@ -71,5 +71,8 @@
     <ClInclude Include="Resource\Graphic\Animator.h">
       <Filter>Source Files\Animator</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Option.h">
+      <Filter>Source Files\Menu</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include <thread>
 
-
 using namespace std;
 
 class GameCore {
@@ -28,6 +27,7 @@ public:
 	void DrawGame(); //Using graphic
 	void GameBehavior();
 	void UserInput();
+	void HandleInput(int key);
 	
 	void Start();
 

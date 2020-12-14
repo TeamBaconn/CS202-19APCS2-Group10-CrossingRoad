@@ -34,7 +34,7 @@ struct LaneInfo {
 	LaneInfo(int time);
 };
 
-enum class GameState { MENU, PAUSE, PLAYING };
+enum class GameState { PLAYING, MENU, PAUSE };
 
 class Level {
 private:

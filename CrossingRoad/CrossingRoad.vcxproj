@@ -33,6 +33,7 @@
     <ClInclude Include="Resource\Graphic\Graphic.h" />
     <ClInclude Include="Resource\Level.h" />
     <ClInclude Include="Resource\Menu.h" />
+    <ClInclude Include="Resource\Option.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

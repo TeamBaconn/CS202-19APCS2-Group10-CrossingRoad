@@ -113,9 +113,9 @@ void Level::spawnRandom()
 
 			Animator* e = anim[rand() % anim.size()];
 
-			Position p(0, (i + 1) * LANE_HEIGHT + LANE_HEIGHT / 2);
-			if (!SpawnArray[i].toRight) p = Position(INGAME_WIDTH + e->getWidth(), (i + 1) * LANE_HEIGHT + LANE_HEIGHT / 2);
-
+			Position p;
+			if (!SpawnArray[i].toRight) p = Position(INGAME_WIDTH + e->getWidth(), 0);
+			p = p + Position(0, (i + 1) * LANE_HEIGHT + LANE_HEIGHT*1/2+ (rand()%(LANE_HEIGHT*2/3)));
 			entities.push_back(new Car(p, e, i));
 		}
 	}

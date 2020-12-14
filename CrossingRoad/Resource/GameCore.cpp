@@ -8,8 +8,13 @@ void GameCore::GameBehavior() {
 		Sleep(GAME_RATE);
 		menu.push(GAME_RATE);
 		if (state != GameState::PLAYING) continue;
-		if (level.isLost()) {
+		level.lost += (level.lost ? GAME_RATE : 0);
+		if (level.lost > LOST_DELAY) {
+			//Return to menu
+			menu.option = new LostOption(level.score, level.score);
 			state = GameState::MENU;
+			level = Level();
+			continue;
 		}
 		level.CheckEntity();
 	}
@@ -34,7 +39,7 @@ void GameCore::HandleInput(int c) {
 		//Save save o day nay
 		break;
 	case PLAY_REQUEST:
-		level = Level(5, 2);
+		level = Level();
 		state = GameState::PLAYING;
 		break;
 	case LOAD_REQUEST:
@@ -62,6 +67,7 @@ void GameCore::UserInput() {
 			HandleInput(c);
 			continue;
 		}
+		if (level.lost) continue;
 		Entity* player = level.player;
 		switch ((int)c) {
 		case 80:

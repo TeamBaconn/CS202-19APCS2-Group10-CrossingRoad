@@ -8,6 +8,8 @@ car2.txt
 car3.txt
 3
 house.txt
+3
+explosion.txt
 1
 dino.txt
 2

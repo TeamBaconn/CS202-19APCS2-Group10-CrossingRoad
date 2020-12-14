@@ -110,11 +110,12 @@ class CreditOption : public Option {
 public:
 	CreditOption() {
 		title = "Here are my creators: ";
-		length = 5;
+		length = 6;
 		s = new string[length]{ "Nguyen Lam Tuong - 19125017", 
 		"ABC",
 		"XYZ",
 		"CCD",
+		"",
 		"Back"};
 		select = 0;
 	}
@@ -122,7 +123,29 @@ public:
 		if (key != ENTER) 
 			return OptionRequest();
 		switch (getSelectIndex()) {
-		case 4:
+		case 5:
+			return OptionRequest(BACK_MENU_REQUEST, "");
+		}
+		return OptionRequest();
+	}
+};
+
+class LostOption : public Option {
+public:
+	LostOption(int currentScore, int highScore) {
+		title = "Useless. Guess I have to do it myself >:(";
+		length = 4;
+		s = new string[length]{ "You scored: " + to_string(currentScore),
+			"High score: " + to_string(highScore),
+			"",
+		"Back to menu" };
+		select = 0;
+	}
+	OptionRequest Select(int key) {
+		if (key != ENTER)
+			return OptionRequest();
+		switch (getSelectIndex()) {
+		case 3:
 			return OptionRequest(BACK_MENU_REQUEST, "");
 		}
 		return OptionRequest();

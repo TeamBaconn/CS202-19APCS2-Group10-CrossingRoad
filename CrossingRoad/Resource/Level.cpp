@@ -30,7 +30,7 @@ Level::Level(int lane, int mode)
 	player = new Player
 	(Position(LANE_WIDTH / 2, 2), getAnimation(HUMAN_ID)[0]);
 
-	Animator* house = getAnimation(3)[0];
+	Animator* house = getAnimation(PROP_ID)[0];
 	entities.push_back(new Prop(Position(house->getWidth() / 2, 5), house));
 
 	ResetLane();
@@ -56,7 +56,7 @@ void Level::ResetLane() {
 		LaneInfo info(0);
 		SpawnArray.push_back(info);
 		Position pos(info.toRight ? 3 : -3 + width, i * LANE_HEIGHT + LANE_HEIGHT * 4 / 5);
-		entities.push_back(new Light(pos, getAnimation(2)[0], i - 1));
+		entities.push_back(new Light(pos, getAnimation(LIGHT_ID)[0], i - 1));
 	}
 }
 
@@ -123,7 +123,13 @@ void Level::spawnRandom()
 
 void Level::LooseGame()
 {
-	lost = true;
+	if (lost) return;
+	lost = 1;
+	Animator* exp = getAnimation(PROP_ID)[1];
+	player->remove = true;
+	Entity* en = new Prop(Position(exp->getWidth() / 2 + player->GetPosition().x, player->GetPosition().y), exp);
+	en->changeBase(1);
+	entities.push_back(en);
 }
 
 const Entity* Level::getPlayer() const
@@ -193,7 +199,3 @@ int Level::getScore() const
 	return score;
 }
 
-bool Level::isLost() const
-{
-	return lost;
-}

@@ -24,6 +24,8 @@
 #define TRAFFIC_TIME 3000
 #define TRAFFIC_GAP 2000
 
+#define LOST_DELAY 3000
+
 #include "Entity/Entity.h"
 #include <random>
 
@@ -42,7 +44,7 @@ private:
 	Entity* player;
 	vector<Entity*> entities;
 	int width, height, mode, lane;
-	bool lost = false;
+	int lost = 0;
 	int checkPoint = 1;
 	int score = 0;
 	//Lane
@@ -51,8 +53,8 @@ public:
 	int getLane() const {
 		return lane-1;
 	}
-	Level() = default;
-	Level(int lane, int mode);
+	Level(int lane, int mode); 
+	Level() : Level(5,2){}
 	LaneInfo& getLane(int i);
 	void ResetLane();
 	void CheckEntity();
@@ -70,8 +72,6 @@ public:
 
 	int getHeight() const;
 	int getScore() const;
-
-	bool isLost() const;
 
 	friend class GameCore;
 };

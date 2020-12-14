@@ -5,6 +5,8 @@
 
 #define HUMAN_ID 0
 #define CAR_ID 1
+#define LIGHT_ID 2
+#define PROP_ID 3
 
 class Position {
 public:

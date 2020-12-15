@@ -188,11 +188,14 @@ public:
 };
 
 class PauseOption : public Option {
+private:
+	bool saved;
 public:
 	PauseOption() {
+		saved = false;
 		title = "Need to take a break?";
 		length = 5;
-		s = new string[length]{ "",
+		s = new string[length]{"",
 		"Save",
 		"",
 		"Resume",
@@ -207,6 +210,9 @@ public:
 		}
 		switch (getSelectIndex()) {
 		case 1:
+			if (saved) break;
+			saved = true;
+			s[1] = "SAVE COMPLETE!";
 			return OptionRequest(SAVE_SAVE_REQUEST, s[0]);
 		case 3:
 			return OptionRequest(RESUME_GAME, "");

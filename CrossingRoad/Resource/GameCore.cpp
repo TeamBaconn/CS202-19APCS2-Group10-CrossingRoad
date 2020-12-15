@@ -17,6 +17,7 @@ void GameCore::GameBehavior() {
 			int highscore = level.score;
 			if (fin) {
 				fin >> highscore >> highscore;
+				highscore = highscore > level.score ? highscore : level.score;
 				fin.close();
 			}
 

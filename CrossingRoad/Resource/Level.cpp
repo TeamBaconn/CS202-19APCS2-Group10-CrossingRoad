@@ -7,6 +7,11 @@ LaneInfo::LaneInfo(int time) {
 	open = new bool(rand() % 2);
 }
 
+int Level::getLane() const
+{
+	return lane - 1;
+}
+
 Level::Level(int lane, int mode)
 {
 	//Load resource

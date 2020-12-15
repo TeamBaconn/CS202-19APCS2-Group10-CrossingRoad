@@ -50,9 +50,7 @@ private:
 	//Lane
 	vector<LaneInfo> SpawnArray;
 public:
-	int getLane() const {
-		return lane - 1;
-	}
+	int getLane() const;
 	Level(int lane, int mode);
 	Level() : Level(5, 2) {}
 	LaneInfo& getLane(int i);

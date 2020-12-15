@@ -76,6 +76,11 @@ bool Car::Behavior(int rate, Level & level) {
 	int secondHalf = GetPosition().x - getAnimatorData().getWidth() / 2;
 	int botY = GetPosition().y;
 	int topY = GetPosition().y-getAnimatorData().getHeight();
+	int horizontal = GetPosition().x - level.getPlayer()->GetPosition().x;
+	int vertical = GetPosition().y - level.getPlayer()->GetPosition().y;
+	if (horizontal <= 5 && horizontal >= -5&&vertical>=0&&vertical<8) {
+		level.setSoundName(getAnimator()->getSound());
+	}
 	if (secondHalf <= level.getPlayer()->GetPosition().x
 		&& level.getPlayer()->GetPosition().x <= firstHalf
 		&& botY>=level.getPlayer()->GetPosition().y

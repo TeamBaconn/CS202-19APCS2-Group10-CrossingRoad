@@ -1,6 +1,6 @@
 #ifndef GAMECORE_H_INCLUDED
 #define GAMECORE_H_INCLUDED
-
+#define SOUND "./Resource/SOUND/"
 #include "chrono"
 #include <iostream>
 #include <fstream>
@@ -11,7 +11,9 @@
 #include <conio.h>
 #include <stdlib.h>
 #include <thread>
-
+#include <windows.h>
+#include <mmsystem.h>
+#pragma comment(lib,"Winmm.lib")
 using namespace std;
 
 class GameCore {
@@ -28,6 +30,7 @@ public:
 	void GameBehavior();
 	void UserInput();
 	void HandleInput(int key);
+	void SoundBehavior();
 	
 	void Start();
 

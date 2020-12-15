@@ -26,6 +26,7 @@ public:
 
 	int getWidth();
 	int getOffSetY();
+	string getSound();
 	friend class Level;
 	friend class AnimatorData;
 };

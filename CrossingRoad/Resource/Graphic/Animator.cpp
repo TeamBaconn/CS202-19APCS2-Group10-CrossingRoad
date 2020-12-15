@@ -117,6 +117,11 @@ int Animator::getOffSetY() {
 	return off_set_y;
 }
 
+string Animator::getSound()
+{
+	return sound;
+}
+
 AnimatorData::AnimatorData() = default;
 
 AnimatorData::AnimatorData(Animator * animator)

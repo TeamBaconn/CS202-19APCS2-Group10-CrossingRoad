@@ -43,6 +43,7 @@ private:
 	vector<Animator*> anim_list;
 	Entity* player;
 	vector<Entity*> entities;
+	string soundName = "blank";
 	int width, height, mode, lane;
 	int lost = 0;
 	int checkPoint = 1;
@@ -77,6 +78,9 @@ public:
 
 	int getHeight() const;
 	int getScore() const;
+	void setSoundName(string set) {
+		soundName = set;
+	}
 
 	friend class GameCore;
 };

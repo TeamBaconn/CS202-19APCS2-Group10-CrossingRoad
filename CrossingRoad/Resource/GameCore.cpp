@@ -107,6 +107,16 @@ void GameCore::UserInput() {
 		}
 	}
 }
+void GameCore::SoundBehavior()
+{
+	while (1) {
+		if (level.soundName != "blank") {
+			string pathway = SOUND + level.soundName;
+			std::wstring stemp = std::wstring(pathway.begin(), pathway.end());
+			PlaySound(stemp.c_str(), NULL, SND_FILENAME | SND_SYNC);
+		}
+	}
+}
 void GameCore::Start() {
 	//Draw game
 	thread t3(&GameCore::DrawGame, this);
@@ -114,9 +124,12 @@ void GameCore::Start() {
 	thread t1(&GameCore::GameBehavior, this);
 	//Nhan input tu user
 	thread t2(&GameCore::UserInput, this);
+	//control game sound
+	thread t4(&GameCore::SoundBehavior, this);
 	t1.join();
 	t2.join();
 	t3.join();
+	t4.join();
 }
 void SetColor(int ForgC)
 {

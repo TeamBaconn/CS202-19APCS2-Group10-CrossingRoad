@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <time.h>
 
-#define GAME_RATE 50
+#define GAME_RATE 70
 
 #define LANE_WIDTH 120
 #define LANE_HEIGHT 8
@@ -44,6 +44,7 @@ private:
 	Entity* player;
 	vector<Entity*> entities;
 	string soundName = "blank";
+	string otherSoundName = "blank";
 	int width, height, mode, lane;
 	int lost = 0;
 	int checkPoint = 1;
@@ -80,6 +81,9 @@ public:
 	int getScore() const;
 	void setSoundName(string set) {
 		soundName = set;
+	}
+	void setOtherSoundName(string set) {
+		otherSoundName = set;
 	}
 
 	friend class GameCore;

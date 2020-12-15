@@ -110,12 +110,19 @@ void GameCore::UserInput() {
 void GameCore::SoundBehavior()
 {
 	while (1) {
+		if (level.otherSoundName != "blank") {
+			string pathway1 = SOUND + level.otherSoundName;
+			std::wstring stemp1 = std::wstring(pathway1.begin(), pathway1.end());
+			PlaySound(stemp1.c_str(), NULL, SND_FILENAME | SND_SYNC);
+			level.otherSoundName = "blank";
+			goto a;
+		}
 		if (level.soundName != "blank") {
 			string pathway = SOUND + level.soundName;
 			std::wstring stemp = std::wstring(pathway.begin(), pathway.end());
 			PlaySound(stemp.c_str(), NULL, SND_FILENAME | SND_SYNC);
-			level.setSoundName("blank");
 		}
+		a: level.setSoundName("blank");
 	}
 }
 void GameCore::Start() {
@@ -127,11 +134,11 @@ void GameCore::Start() {
 	thread t2(&GameCore::UserInput, this);
 	//control game sound
 	thread t4(&GameCore::SoundBehavior, this);
+	//for bomb sound
 	t1.join();
 	t2.join();
 	t3.join();
-	t4.join();
-}
+	t4.join();}
 void SetColor(int ForgC)
 {
 	WORD wColor;

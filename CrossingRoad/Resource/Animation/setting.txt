@@ -15,7 +15,7 @@ house.txt
 text
 3
 explosion.txt
-text
+Explode.wav
 1
 dino.txt
 Dino.wav

@@ -133,6 +133,7 @@ void Level::LooseGame()
 	if (lost) return;
 	lost = 1;
 	Animator* exp = getAnimation(PROP_ID)[1];
+	otherSoundName = exp->getSound();
 	player->remove = true;
 	Entity* en = new Prop(Position(exp->getWidth() / 2 + player->GetPosition().x, player->GetPosition().y), exp);
 	en->changeBase(1);

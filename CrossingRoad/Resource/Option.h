@@ -1,6 +1,8 @@
 #ifndef OPTION_H_INCLUDED
 #define OPTION_H_INCLUDED
+
 #include <string>
+#include <algorithm>
 
 #define OPTION_OFFSET_X 2
 

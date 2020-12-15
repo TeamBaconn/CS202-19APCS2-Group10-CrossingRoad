@@ -60,13 +60,13 @@ public:
 	void LooseGame();
 	const Entity* getPlayer() const;
 	vector<Animator*> getAnimation(int type) const;
+
+	Animator* getAnimator(string name);
 	char** generateMap(int width, int height) const;
 	static char** reset(int width, int height);
 	static void deleteMap(char**& old, int width);
 
-	void outputAnimation(vector<Frame>& set, ofstream& fout, Entity* entity);
 	void writeE2File(ofstream& fout, Entity* entity);
-	void inputAnimation(ifstream& fin, vector<Frame>& animation_set);
 	void readF2E(ifstream& fin, Entity*& entity);
 	void saveLevel(string name);
 	void loadLevel(string name);

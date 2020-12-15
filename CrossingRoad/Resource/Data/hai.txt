@@ -1,0 +1,32 @@
+5
+2
+20
+1 1 3917 1931
+0 1 4619 100
+0 0 800 1928
+0 0 1150 791
+12
+human.txt
+0 60 18 0
+house.txt
+3 72 5 0
+traffic_light.txt
+2 3 14 0
+traffic_light.txt
+2 117 22 0
+traffic_light.txt
+2 117 30 0
+traffic_light.txt
+2 117 38 0
+dino.txt
+1 68 16 0
+car2.txt
+1 67 24 0
+car3.txt
+1 84 30 0
+car2.txt
+1 90 36 0
+dino.txt
+1 47 13 0
+dino.txt
+1 123 38 0

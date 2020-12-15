@@ -21,7 +21,7 @@ void GameCore::GameBehavior() {
 				fin.close();
 			}
 
-			menu.option = new LostOption(level.score, highscore);
+			menu.ChangeMenu(new LostOption(level.score, highscore));
 			state = GameState::MENU;
 			level = Level();
 			continue;
@@ -44,6 +44,7 @@ void GameCore::HandleInput(int c) {
 	switch (op.id) {
 	case LOAD_SAVE_REQUEST:
 		//Load save o day nay
+		level = Level();
 		level.loadLevel(op.value);
 		state = GameState::PLAYING;
 		break;
@@ -56,13 +57,14 @@ void GameCore::HandleInput(int c) {
 		state = GameState::PLAYING;
 		break;
 	case LOAD_REQUEST:
-		menu.option = new LoadOption();
+		menu.ChangeMenu(new LoadOption());
 		break;
 	case BACK_MENU_REQUEST:
-		menu.option = new MenuOption();
+		menu.ChangeMenu(new MenuOption());
+		level = Level();
 		break;
 	case CREDIT_REQUEST:
-		menu.option = new CreditOption();
+		menu.ChangeMenu(new CreditOption());
 		break;
 	case RESUME_GAME:
 		state = GameState::PLAYING;
@@ -101,7 +103,7 @@ void GameCore::UserInput() {
 			break;
 		case ESC:
 			this->state = GameState::PAUSE;
-			menu.option = new PauseOption();
+			menu.ChangeMenu(new PauseOption());
 		}
 	}
 }

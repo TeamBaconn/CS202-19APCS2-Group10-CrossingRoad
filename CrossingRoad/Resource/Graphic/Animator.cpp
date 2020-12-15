@@ -84,13 +84,20 @@ Animator* readAnimator(string path, int id)
 		}
 		kc.key.push_back(k);
 	}
-	return new Animator(frame, revframe, off_set_y, speed, id, set);
+	return new Animator(path, frame, revframe, off_set_y, speed, id, set);
 }
 
 Animator::Animator() = default;
 
-Animator::Animator(vector<Frame> & animation_set, vector<Frame> & animation_set_reverse, int off_set_y, int speed, int id, int set)
+Animator::Animator(string name, 
+	vector<Frame> & animation_set, 
+	vector<Frame> & animation_set_reverse,
+	int off_set_y, 
+	int speed, 
+	int id, 
+	int set)
 {
+	this->name = name;
 	this->animation_set = animation_set;
 	this->animation_set_reverse = animation_set_reverse;
 	this->id = id;

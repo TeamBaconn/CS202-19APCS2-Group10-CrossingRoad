@@ -16,8 +16,13 @@ public:
 
 	vector<AnimatorData>& getList();
 
-	~Menu() {
+	void ChangeMenu(Option* op) {
+		if (option != nullptr) delete option;
+		option = op;
+	}
 
+	~Menu() {
+		if (option != nullptr) delete option;
 	}
 
 };

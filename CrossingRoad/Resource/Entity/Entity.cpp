@@ -81,6 +81,7 @@ bool Car::Behavior(int rate, Level & level) {
 		&& botY>=level.getPlayer()->GetPosition().y
 		&& level.getPlayer()->GetPosition().y >= (botY + topY)/2) {
 		level.LooseGame();
+		remove = true;
 	}
 	if (!data.reverse) return pos.x - animator->getWidth() / 2 > LANE_WIDTH;
 	else return pos.x + animator->getWidth() / 2 < 0; 

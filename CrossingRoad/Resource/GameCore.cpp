@@ -3,6 +3,7 @@
 GameCore::GameCore() {
 	this->state = GameState::MENU;
 }
+
 void GameCore::GameBehavior() {
 	while (1) {
 		Sleep(GAME_RATE);
@@ -11,7 +12,16 @@ void GameCore::GameBehavior() {
 		level.lost += (level.lost ? GAME_RATE : 0);
 		if (level.lost > LOST_DELAY) {
 			//Return to menu
-			menu.option = new LostOption(level.score, level.score);
+
+			ifstream fin("./Resource/Data/highscore.txt");
+			int highscore = level.score;
+			if (fin) {
+				fin >> highscore >> highscore;
+				highscore = highscore > level.score ? highscore : level.score;
+				fin.close();
+			}
+
+			menu.option = new LostOption(level.score, highscore);
 			state = GameState::MENU;
 			level = Level();
 			continue;
@@ -34,9 +44,12 @@ void GameCore::HandleInput(int c) {
 	switch (op.id) {
 	case LOAD_SAVE_REQUEST:
 		//Load save o day nay
+		level.loadLevel(op.value);
+		state = GameState::PLAYING;
 		break;
 	case SAVE_SAVE_REQUEST:
 		//Save save o day nay
+		level.saveLevel(op.value);
 		break;
 	case PLAY_REQUEST:
 		level = Level();
@@ -63,7 +76,7 @@ void GameCore::UserInput() {
 		Sleep(GAME_RATE);
 		char c = _getch();
 
- 		if (state != GameState::PLAYING) {
+		if (state != GameState::PLAYING) {
 			HandleInput(c);
 			continue;
 		}
@@ -71,19 +84,19 @@ void GameCore::UserInput() {
 		Entity* player = level.player;
 		switch ((int)c) {
 		case 80:
-			player->Move(Position(0,1));
+			player->Move(Position(0, 1));
 			player->changeBase(3);
 			break;
 		case 72:
-			player->Move(Position(0,-1));
+			player->Move(Position(0, -1));
 			player->changeBase(3);
 			break;
 		case 75:
-			player->Move(Position(-2,0));
+			player->Move(Position(-2, 0));
 			player->changeBase(2);
 			break;
 		case 77:
-			player->Move(Position(2,0));
+			player->Move(Position(2, 0));
 			player->changeBase(1);
 			break;
 		case ESC:
@@ -119,7 +132,7 @@ void SetColor(int ForgC)
 void GameCore::DrawGame() {
 	char** old = nullptr;
 	while (1) {
-		char** map = graphic.getDrawableMap(level,state);
+		char** map = graphic.getDrawableMap(level, state);
 
 		graphic.drawMenu(map, menu, state);
 
@@ -133,7 +146,8 @@ void GameCore::DrawGame() {
 				if (map[i][j] == 'G' && state == GameState::PLAYING) {
 					SetColor(10);
 					putchar((char)220);
-				}else if (map[i][j] == 'R' && state == GameState::PLAYING) {
+				}
+				else if (map[i][j] == 'R' && state == GameState::PLAYING) {
 					SetColor(4);
 					putchar((char)220);
 				}

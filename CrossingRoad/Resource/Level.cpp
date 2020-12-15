@@ -18,12 +18,14 @@ Level::Level(int lane, int mode)
 	ifstream info;
 	info.open((string)ANIMATION + "/setting.txt");
 	string c;
+	string sound;
 	int id;
 	while (!info.eof()) {
 		info >> id;
 		info.ignore();
 		getline(info, c);
-		anim_list.push_back(readAnimator(c, id));
+		getline(info, sound);
+		anim_list.push_back(readAnimator(c,sound, id));
 	}
 
 	this->lane = lane;

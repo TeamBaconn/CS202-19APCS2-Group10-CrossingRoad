@@ -57,7 +57,7 @@ void ReplaceAll(string& c, char f, char t)
 	for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
 }
 
-Animator* readAnimator(string path, int id)
+Animator* readAnimator(string path,string sound, int id)
 {
 	ifstream info((string)ANIMATION + "/" + path);
 	if (!info.is_open()) return nullptr;
@@ -84,18 +84,18 @@ Animator* readAnimator(string path, int id)
 		}
 		kc.key.push_back(k);
 	}
-	return new Animator(path, frame, revframe, off_set_y, speed, id, set);
+	return new Animator(path, frame, revframe, off_set_y, speed, id, set,sound);
 }
 
 Animator::Animator() = default;
 
-Animator::Animator(string name, 
+Animator::Animator(string name,
 	vector<Frame> & animation_set, 
 	vector<Frame> & animation_set_reverse,
 	int off_set_y, 
 	int speed, 
 	int id, 
-	int set)
+	int set,string sound)
 {
 	this->name = name;
 	this->animation_set = animation_set;
@@ -104,6 +104,7 @@ Animator::Animator(string name,
 	this->set = set;
 	this->speed = speed;
 	this->off_set_y = off_set_y;
+	this->sound = sound;
 }
 
 Animator::~Animator() = default;

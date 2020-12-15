@@ -2,8 +2,9 @@
 
 Menu::Menu()
 {
-	list.push_back(readAnimator("menu_human_face.txt", 1));
-	list.push_back(readAnimator("speech_bubble.txt", 1));
+	string nothing = "";
+	list.push_back(readAnimator("menu_human_face.txt",nothing, 1));
+	list.push_back(readAnimator("speech_bubble.txt",nothing, 1));
 	option = new MenuOption();
 }
 

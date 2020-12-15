@@ -16,12 +16,12 @@ struct Frame {
 };
 class Animator {
 private:
-	string name;
+	string name,sound;
 	int id, set, speed, off_set_y;
 	vector<Frame> animation_set,animation_set_reverse;
 public:
 	Animator();
-	Animator(string name, vector<Frame>& animation_set, vector<Frame>& animation_set_reverse, int off_set_y, int speed, int id, int set);
+	Animator(string name, vector<Frame>& animation_set, vector<Frame>& animation_set_reverse, int off_set_y, int speed, int id, int set,string sound);
 	~Animator();
 
 	int getWidth();
@@ -44,5 +44,5 @@ public:
 	int getHeight();
 };
 void ReplaceAll(string& c, char f, char t);
-Animator* readAnimator(string path, int id);
+Animator* readAnimator(string path,string sound, int id);
 #endif // ANIMATOR_H_INCLUDED

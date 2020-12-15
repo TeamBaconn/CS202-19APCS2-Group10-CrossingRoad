@@ -14,13 +14,13 @@ void GameCore::GameBehavior() {
 			//Return to menu
 
 			ifstream fin("./Resource/Data/highscore.txt");
+			int highscore = level.score;
 			if (fin) {
-				int highscore;
 				fin >> highscore >> highscore;
 				fin.close();
 			}
 
-			menu.option = new LostOption(level.score, level.score);
+			menu.option = new LostOption(level.score, highscore);
 			state = GameState::MENU;
 			level = Level();
 			continue;

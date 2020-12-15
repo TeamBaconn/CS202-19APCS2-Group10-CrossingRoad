@@ -157,7 +157,7 @@ public:
 			sort(scores.begin(), scores.end(), [](int a, int b) {return (a > b); });
 
 			fin.close();
-			ofstream fout("highscore.txt");
+			ofstream fout("./Resource/Data/highscore.txt");
 
 			count = count + 1 > 9 ? 9 : count + 1;
 			fout << count << '\n';

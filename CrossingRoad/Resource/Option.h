@@ -133,6 +133,7 @@ public:
 class LostOption : public Option {
 public:
 	LostOption(int currentScore, int highScore) {
+		saveHighScore(currentScore);
 		title = "Useless. Guess I have to do it myself >:(";
 		length = 4;
 		s = new string[length]{ "You scored: " + to_string(currentScore),
@@ -140,8 +141,6 @@ public:
 			"",
 		"Back to menu" };
 		select = 0;
-		saveHighScore(highScore);
-
 	}
 	void saveHighScore(int score) {
 		ifstream fin("./Resource/Data/highscore.txt");
@@ -168,12 +167,13 @@ public:
 			fout.close();
 		}
 		else {
-			ofstream fout("highscore.txt");
+			ofstream fout("./Resource/Data/highscore.txt");
 			fout << 1 << '\n';
 			fout << score;
 		}
 	}
 
+	
 	OptionRequest Select(int key) {
 		if (key != ENTER)
 			return OptionRequest();

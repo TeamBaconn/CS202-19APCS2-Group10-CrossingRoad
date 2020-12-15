@@ -1,6 +1,6 @@
 #ifndef GAMECORE_H_INCLUDED
 #define GAMECORE_H_INCLUDED
-#define SOUND "./Resource/SOUND/"
+#define SOUND "./Resource/Sound/"
 #include "chrono"
 #include <iostream>
 #include <fstream>

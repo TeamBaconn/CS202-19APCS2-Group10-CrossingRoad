@@ -18,7 +18,7 @@ explosion.txt
 text
 1
 dino.txt
-Dino.txt
+Dino.wav
 2
 traffic_light.txt
 text

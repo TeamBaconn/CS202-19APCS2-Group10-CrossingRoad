@@ -114,6 +114,7 @@ void GameCore::SoundBehavior()
 			string pathway = SOUND + level.soundName;
 			std::wstring stemp = std::wstring(pathway.begin(), pathway.end());
 			PlaySound(stemp.c_str(), NULL, SND_FILENAME | SND_SYNC);
+			level.setSoundName("blank");
 		}
 	}
 }

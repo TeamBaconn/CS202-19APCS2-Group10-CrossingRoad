@@ -51,10 +51,10 @@ private:
 	vector<LaneInfo> SpawnArray;
 public:
 	int getLane() const {
-		return lane-1;
+		return lane - 1;
 	}
-	Level(int lane, int mode); 
-	Level() : Level(5,2){}
+	Level(int lane, int mode);
+	Level() : Level(5, 2) {}
 	LaneInfo& getLane(int i);
 	void ResetLane();
 	void CheckEntity();
@@ -65,6 +65,13 @@ public:
 	char** generateMap(int width, int height) const;
 	static char** reset(int width, int height);
 	static void deleteMap(char**& old, int width);
+
+	void outputAnimation(vector<Frame>& set, ofstream& fout, Entity* entity);
+	void writeE2File(ofstream& fout, Entity* entity);
+	void inputAnimation(ifstream& fin, vector<Frame>& animation_set);
+	void readF2E(ifstream& fin, Entity*& entity);
+	void saveLevel(string name);
+	void loadLevel(string name);
 
 	vector<Entity*> getEntities() const;
 

@@ -86,3 +86,76 @@ Animator* readAnimator(string path, int id)
 	}
 	return new Animator(frame, revframe, off_set_y, speed, id, set);
 }
+
+Animator::Animator() = default;
+
+Animator::Animator(vector<Frame> & animation_set, vector<Frame> & animation_set_reverse, int off_set_y, int speed, int id, int set)
+{
+	this->animation_set = animation_set;
+	this->animation_set_reverse = animation_set_reverse;
+	this->id = id;
+	this->set = set;
+	this->speed = speed;
+	this->off_set_y = off_set_y;
+}
+
+Animator::~Animator() = default;
+
+int Animator::getWidth() {
+	return animation_set[0].key[0].size();
+}
+
+int Animator::getOffSetY() {
+	return off_set_y;
+}
+
+AnimatorData::AnimatorData() = default;
+
+AnimatorData::AnimatorData(Animator * animator)
+{
+	this->animator = animator;
+	reverse = false;
+	k = 0;
+	current_time = 0;
+	refresh = 0;
+	base = 0;
+	lim = animator->animation_set.size() / animator->set;
+}
+
+void AnimatorData::push(int frame)
+{
+	current_time += frame;
+	refresh += frame;
+	if (current_time >= animator->speed) {
+		current_time = 0;
+		k++;
+	}
+}
+
+void AnimatorData::changeAnimation(int i)
+{
+	base = i * animator->animation_set.size() / animator->set;
+	lim = base + animator->animation_set.size() / animator->set;
+	if (k < base && lim >= k) k = base;
+	refresh = 0;
+}
+
+Frame AnimatorData::getFrame()
+{
+	if (k >= lim) {
+		if (refresh > 50) {
+			base = 0;
+			lim = animator->animation_set.size() / animator->set;
+		}
+		k = base;
+	}
+	return reverse ? animator->animation_set_reverse[k] : animator->animation_set[k];
+}
+
+int AnimatorData::getWidth() {
+	return getFrame().key[0].size();
+}
+
+int AnimatorData::getHeight() {
+	return getFrame().key.size();
+}

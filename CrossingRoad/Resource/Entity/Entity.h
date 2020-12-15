@@ -35,6 +35,8 @@ public:
 
 	//Functions
 	virtual Position Move(Position pos);
+	
+	virtual int getID() { return 0; }
 
 	virtual bool Behavior(int rate, Level& level) {
 		data.push(rate);
@@ -56,6 +58,7 @@ private:
 public:
 	Car();
 	Car(Position pos, Animator* animator, int lane);
+	int getID() { return CAR_ID; }
 
 	bool Behavior(int rate, Level& level);
 	bool isCar();
@@ -74,6 +77,7 @@ class Prop : public Entity {
 public:
 	Prop();
 	Prop(Position pos, Animator* animator);
+	int getID() { return PROP_ID; }
 };
 
 class Light : public Entity {
@@ -84,5 +88,6 @@ public:
 	Light(Position pos, Animator* animator, int lane);
 	bool isCar();
 	bool Behavior(int rate, Level& level);
+	int getID() { return LIGHT_ID; }
 };
 #endif // ENTITY_H_INCLUDED

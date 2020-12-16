@@ -43,6 +43,9 @@ public:
 	int getSelectIndex();
 	string getTitle();
 	void Navigate(int k);
+	~Option() {
+		delete[] s;
+	}
 };
 
 class MenuOption : public Option {

@@ -43,6 +43,10 @@ public:
 	Frame getFrame();
 	int getWidth();
 	int getHeight();
+
+	Animator* getAnimator() {
+		return animator;
+	}
 };
 void ReplaceAll(string& c, char f, char t);
 Animator* readAnimator(string path,string sound, int id);

@@ -8,6 +8,7 @@
 #define LIGHT_ID 2
 #define PROP_ID 3
 
+
 class Position {
 public:
 	float x, y;
@@ -18,14 +19,17 @@ public:
 
 	Position operator+(const Position& p);
 	void operator=(const Position& p);
+	int Distance(const Position& p) {
+		return sqrt((p.x - x)* (p.x - x)/(3*3) + (p.y - y)* (p.y - y));
+	}
 };
 
 class Entity {
 protected:
 	Position pos;
-	Animator* animator;
 	AnimatorData data;
 	bool remove = false;
+	bool render = true;
 public:
 	//Constructor
 	Entity();
@@ -41,11 +45,14 @@ public:
 		return false;
 	}
 
+	bool canRender() {
+		return render;
+	}
+
 	virtual bool isHostile();
 
 	void changeBase(int id);
 	Position GetPosition() const;
-	Animator* getAnimator();
 	AnimatorData& getAnimatorData();
 	friend class Level;
 };
@@ -53,6 +60,7 @@ public:
 class Hostile : public Entity {
 private:
 	int lane;
+	int sound_off = 0;
 public:
 	Hostile();
 	Hostile(Position pos, Animator* animator, int lane);
@@ -82,7 +90,9 @@ private:
 public:
 	Light();
 	Light(Position pos, Animator* animator, int lane);
-	bool isCar();
+
+	bool isHostile();
+
 	bool Behavior(int rate, Level& level);
 };
 #endif // ENTITY_H_INCLUDED

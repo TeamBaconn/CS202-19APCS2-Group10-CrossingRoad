@@ -1,6 +1,6 @@
 #ifndef GAMECORE_H_INCLUDED
 #define GAMECORE_H_INCLUDED
-#define SOUND "./Resource/Sound/"
+
 #include "chrono"
 #include <iostream>
 #include <fstream>
@@ -30,7 +30,6 @@ public:
 	void GameBehavior();
 	void UserInput();
 	void HandleInput(int key);
-	void SoundBehavior();
 	
 	void Start();
 

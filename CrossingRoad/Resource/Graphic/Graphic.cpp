@@ -68,8 +68,8 @@ void qSort(vector<Entity*>& values, int low, int high) {
 	if (low < high) {
 		int i = low - 1;
 		for (int j = low; j < high; ++j) {
-			if (values[j]->GetPosition().y - values[j]->getAnimator()->getOffSetY() 
-				< values[high]->GetPosition().y - values[high]->getAnimator()->getOffSetY()) {
+			if (values[j]->GetPosition().y - values[j]->getAnimatorData().getAnimator()->getOffSetY() 
+				< values[high]->GetPosition().y - values[high]->getAnimatorData().getAnimator()->getOffSetY()) {
 				++i;
 				swap(values[i], values[j]);
 			}
@@ -97,6 +97,7 @@ void Graphic::drawMenu(char** map, Menu& menu, const GameState& state) {
 				map[40+j][i+5] = frame.key[i][j];
 
 	int max_y = 7;
+	if (menu.option == nullptr) return;
 	max_y = DrawString(map, menu.option->getTitle(), 44, max_y, 80) + 1;
 	for (int i = 0; i < menu.option->getLength(); i++) {
 		max_y = DrawString(map, 
@@ -124,6 +125,7 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 			for (int j = 0; j < width; j += LANE_DISTANCE) drawC(map, j - x, i*LANE_HEIGHT - y, '-', true); 
 			
 		for (int i = 0; i < entities.size(); i++) {
+			if (!entities[i]->canRender()) continue;
 			Frame key = entities[i]->getAnimatorData().getFrame();
 			Position pos(entities[i]->GetPosition().x - key.key[0].length() / 2
 				, entities[i]->GetPosition().y - key.key.size());

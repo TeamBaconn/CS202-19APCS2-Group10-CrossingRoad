@@ -27,7 +27,7 @@ void GameCore::GameBehavior() {
 
 			menu.MenuChange(new LostOption(level.score, highscore));
 			state = GameState::MENU;
-			level = Level();
+			level.resetLevel();
 			continue;
 		}
 		level.CheckEntity();
@@ -36,11 +36,16 @@ void GameCore::GameBehavior() {
 void GameCore::HandleInput(int c) {
 	switch (c) {
 	case 72:
-		menu.option->Navigate(-1);
+		menu.option->Navigate(-1); 
+		Level::PlaySoundEffect("Button_Navigate.wav");
 		return;
 	case 80:
 		menu.option->Navigate(1);
+		Level::PlaySoundEffect("Button_Navigate.wav");
 		return;
+	case ENTER:
+		Level::PlaySoundEffect("Button_Click.wav");
+		break;
 	case -32:
 		return;
 	}
@@ -48,16 +53,18 @@ void GameCore::HandleInput(int c) {
 	switch (op.id) {
 	case LOAD_SAVE_REQUEST:
 		//Load save o day nay
-		level = Level();
+		if(op.value.length() == 0) break;
+		level.resetLevel();
 		level.loadLevel(op.value);
 		state = GameState::PLAYING;
 		break;
 	case SAVE_SAVE_REQUEST:
 		//Save save o day nay
+		if (op.value.length() == 0) break;
 		level.saveLevel(op.value);
 		break;
 	case PLAY_REQUEST:
-		level = Level();
+		level.resetLevel();
 		state = GameState::PLAYING;
 		break;
 	case LOAD_REQUEST:
@@ -65,7 +72,6 @@ void GameCore::HandleInput(int c) {
 		break;
 	case BACK_MENU_REQUEST:
 		menu.MenuChange(new MenuOption());
-		level = Level();
 		break;
 	case CREDIT_REQUEST:
 		menu.MenuChange(new CreditOption());
@@ -111,38 +117,19 @@ void GameCore::UserInput() {
 		}
 	}
 }
-void GameCore::SoundBehavior()
-{
-	while (1) {
-		if (level.otherSoundName != "blank") {
-			string pathway1 = SOUND + level.otherSoundName;
-			std::wstring stemp1 = std::wstring(pathway1.begin(), pathway1.end());
-			PlaySound(stemp1.c_str(), NULL, SND_FILENAME | SND_SYNC);
-			level.otherSoundName = "blank";
-			goto a;
-		}
-		if (level.soundName != "blank") {
-			string pathway = SOUND + level.soundName;
-			std::wstring stemp = std::wstring(pathway.begin(), pathway.end());
-			PlaySound(stemp.c_str(), NULL, SND_FILENAME | SND_SYNC);
-		}
-		a: level.setSoundName("blank");
-	}
-}
+
 void GameCore::Start() {
 	//Draw game
 	thread t3(&GameCore::DrawGame, this);
 	//Behavior
 	thread t1(&GameCore::GameBehavior, this);
 	//Nhan input tu user
-	thread t2(&GameCore::UserInput, this);
-	//control game sound
-	thread t4(&GameCore::SoundBehavior, this);
+	thread t2(&GameCore::UserInput, this);;
 	//for bomb sound
 	t1.join();
 	t2.join();
 	t3.join();
-	t4.join();}
+}
 void SetColor(int ForgC)
 {
 	WORD wColor;

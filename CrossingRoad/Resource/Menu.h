@@ -7,8 +7,8 @@
 class Menu {
 private:
 	vector<AnimatorData> list;
-public:
 	Option* option;
+public:
 	//Constructor
 	Menu();
 
@@ -19,7 +19,8 @@ public:
 	void MenuChange(Option* op);
 
 	~Menu();
-
+	friend class GameCore;
+	friend class Graphic;
 };
 
 #endif // MENU_H_INCLUDED

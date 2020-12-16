@@ -98,7 +98,7 @@ CreditOption::CreditOption()
 	s = new string[length]{ "Nguyen Lam Tuong - 19125017",
 	"Truong Quy Hai - 19125090",
 	"Tran Vinh Long - 19125134",
-	"CCD",
+	"Nguyen Pham Tung Lam - 19125056",
 	"",
 	"Back" };
 	select = 0;

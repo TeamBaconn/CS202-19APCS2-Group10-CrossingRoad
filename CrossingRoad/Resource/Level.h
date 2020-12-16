@@ -26,6 +26,10 @@
 
 #define LOST_DELAY 3000
 
+#define SOUND_DELAY 3000
+#define SOUND_PLAY_DISTANCE 4
+#define SOUND "./Resource/Sound/"
+
 #include "Entity/Entity.h"
 #include <random>
 
@@ -43,8 +47,7 @@ private:
 	vector<Animator*> anim_list;
 	Entity* player;
 	vector<Entity*> entities;
-	string soundName = "blank";
-	string otherSoundName = "blank";
+
 	int width, height, mode, lane;
 	int lost = 0;
 	int checkPoint = 1;
@@ -60,6 +63,8 @@ public:
 	void CheckEntity();
 	void spawnRandom();
 	void GameLose();
+	void KillAllEntities();
+	void resetLevel();
 	const Entity* getPlayer() const;
 	vector<Animator*> getAnimation(int type) const;
 
@@ -79,8 +84,11 @@ public:
 
 	int getHeight() const;
 	int getScore() const;
-	void setSoundName(string set);
-	void setOtherSoundName(string set);
+	bool isLost() {
+		return lost;
+	}
+
+	static void PlaySoundEffect(string name);
 
 	friend class GameCore;
 };

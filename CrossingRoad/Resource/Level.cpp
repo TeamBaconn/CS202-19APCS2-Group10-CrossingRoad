@@ -35,20 +35,27 @@ Level::Level(int lane, int mode)
 
 	//Spawn
 	player = new Player
-	(Position(LANE_WIDTH / 2, 2), getAnimation(HUMAN_ID)[0]);
+	(Position(LANE_WIDTH / 2, 2), getAnimator("human.txt"));
+	entities.push_back(player);
 
-	Animator* house = getAnimation(PROP_ID)[0];
+	Animator* house = getAnimator("house.txt");
 	entities.push_back(new Prop(Position(house->getWidth() / 2, 5), house));
 
 	ResetLane();
 
 	// quai vat initialize
 	srand(time(NULL));
-	entities.push_back(player);
 }
 
 LaneInfo& Level::getLane(int i) {
 	return SpawnArray[i];
+}
+
+void Level::PlaySoundEffect(string name)
+{
+	string path = (string)SOUND + name;
+	std::wstring stemp = std::wstring(path.begin(), path.end());
+	PlaySound(stemp.c_str(), NULL, SND_FILENAME | SND_ASYNC);
 }
 
 void Level::ResetLane() {
@@ -65,6 +72,31 @@ void Level::ResetLane() {
 		Position pos(info.toRight ? 3 : -3 + width, i * LANE_HEIGHT + LANE_HEIGHT * 4 / 5);
 		entities.push_back(new Light(pos, getAnimation(LIGHT_ID)[0], i - 1));
 	}
+}
+void Level::KillAllEntities() {
+	int s = entities.size();
+	for (int i = s - 1; i >= 0; --i)
+		delete entities[i];
+	entities.clear();
+}
+void Level::resetLevel() {
+	//Default
+	lane = 5;
+	mode = 2;
+	lost = 0;
+	checkPoint = 1;
+	score = 0;
+
+	KillAllEntities();
+
+	player = new Player
+	(Position(LANE_WIDTH / 2, 2), getAnimator("human.txt"));
+	entities.push_back(player);
+
+	Animator* house = getAnimator("house.txt");
+	entities.push_back(new Prop(Position(house->getWidth() / 2, 5), house));
+
+	ResetLane();
 }
 
 void Level::CheckEntity()
@@ -96,8 +128,10 @@ void Level::CheckEntity()
 	//This code to remove entity
 	int s = entities.size();
 	for (int i = s - 1; i >= 0; --i) {
-		if (entities[i]->remove)
+		if (entities[i]->remove) {
+			delete entities[i];
 			entities.erase(entities.begin() + i);
+		}
 	}
 	spawnRandom();
 }
@@ -132,9 +166,9 @@ void Level::GameLose()
 {
 	if (lost) return;
 	lost = 1;
-	Animator* exp = getAnimation(PROP_ID)[1];
-	otherSoundName = exp->getSound();
-	player->remove = true;
+	Animator* exp = getAnimator("explosion.txt");
+	PlaySoundEffect(exp->getSound());
+	player->render = false;
 	Entity* en = new Prop(Position(exp->getWidth() / 2 + player->GetPosition().x, player->GetPosition().y), exp);
 	en->changeBase(1);
 	entities.push_back(en);
@@ -206,19 +240,12 @@ int Level::getScore() const
 {
 	return score;
 }
-void Level::setSoundName(string set)
-{
-	soundName = set;
-}
-void Level::setOtherSoundName(string set)
-{
-	otherSoundName = set;
-}
+
 void Level::writeE2File(ofstream& fout, Entity* entity) {
 	// animator
-	fout << entity->animator->name << '\n';
+	fout << entity->getAnimatorData().getAnimator()->name << '\n';
 	//ID
-	fout << entity->animator->id << ' ';
+	fout << entity->getAnimatorData().getAnimator()->id << ' ';
 
 	//Position
 	fout << entity->pos.x << ' ';
@@ -298,7 +325,8 @@ void Level::loadLevel(string name) {
 
 		size_t esize;
 		fin >> esize;
-		entities.clear();
+
+		KillAllEntities();
 
 		Entity* temp = nullptr;
 		readF2E(fin, temp);

@@ -46,11 +46,6 @@ Position Entity::GetPosition() const
 	return pos;
 }
 
-Animator* Entity::getAnimator()
-{
-	return animator;
-}
-
 AnimatorData& Entity::getAnimatorData() {
 	return data;
 }
@@ -60,7 +55,6 @@ Entity::Entity() {
 }
 Entity::Entity(Position pos, Animator * animator) {
 	this->pos = pos;
-	this->animator = animator;
 	this->data = AnimatorData(animator);
 }
 
@@ -72,6 +66,8 @@ Hostile::Hostile(Position pos, Animator* animator, int lane) : Entity(pos, anima
 
 bool Hostile::Behavior(int rate, Level & level) {
 	Entity::Behavior(rate, level);
+	sound_off += rate;
+	if (level.isLost()) return false;
 	data.reverse = !level.getLane(lane).toRight;
 	if (level.getLane(lane).open) {
 		if (!data.reverse) Move(Position(1, 0));
@@ -81,20 +77,21 @@ bool Hostile::Behavior(int rate, Level & level) {
 	int secondHalf = GetPosition().x - getAnimatorData().getWidth() / 2;
 	int botY = GetPosition().y;
 	int topY = GetPosition().y-getAnimatorData().getHeight();
-	int vertical = GetPosition().y - level.getPlayer()->GetPosition().y;
-	if (level.getPlayer()->GetPosition().x>=GetPosition().x-9&& level.getPlayer()->GetPosition().x <= GetPosition().x + 9) {
-		if(vertical>0&&vertical<8)
-		level.setSoundName(getAnimator()->getSound());
+	
+	if(level.getPlayer()->GetPosition().Distance(pos) <= SOUND_PLAY_DISTANCE && sound_off > SOUND_DELAY){
+		sound_off = 0;
+		level.PlaySoundEffect(data.getAnimator()->getSound());
 	}
+
 	if (secondHalf <= level.getPlayer()->GetPosition().x
 		&& level.getPlayer()->GetPosition().x <= firstHalf
 		&& botY>=level.getPlayer()->GetPosition().y
 		&& level.getPlayer()->GetPosition().y >= (botY + topY)/2) {
 		level.GameLose();
-		remove = true;
+		render = false;
 	}
-	if (!data.reverse) return pos.x - animator->getWidth() / 2 > LANE_WIDTH;
-	else return pos.x + animator->getWidth() / 2 < 0; 
+	if (!data.reverse) return pos.x - data.getAnimator()->getWidth() / 2 > LANE_WIDTH;
+	else return pos.x + data.getAnimator()->getWidth() / 2 < 0; 
 }
 
 bool Hostile::isHostile()
@@ -119,9 +116,9 @@ bool Player::Behavior(int rate, Level & lvl) {
 
 Position Player::Move(Position pos) {
 	Position tmp(this->pos + pos);
-	if (tmp.x-getAnimator()->getWidth()/2 < 0 
+	if (tmp.x- data.getAnimator()->getWidth()/2 < 0
 		|| tmp.y < 0 
-		|| tmp.x + getAnimator()->getWidth() / 2 > LANE_WIDTH) return this->pos;
+		|| tmp.x + data.getAnimator()->getWidth() / 2 > LANE_WIDTH) return this->pos;
 	return Entity::Move(pos);
 }
 
@@ -133,7 +130,7 @@ Light::Light() = default;
 
 Light::Light(Position pos, Animator* animator, int lane) : Entity(pos, animator), lane(lane) {}
 
-bool Light::isCar() {
+bool Light::isHostile() {
 	return true;
 }
 

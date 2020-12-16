@@ -41,7 +41,7 @@ public:
 		return false;
 	}
 
-	virtual bool isCar() { return false; }
+	virtual bool isHostile();
 
 	void changeBase(int id);
 	Position GetPosition() const;
@@ -50,15 +50,15 @@ public:
 	friend class Level;
 };
 
-class Car : public Entity {
+class Hostile : public Entity {
 private:
 	int lane;
 public:
-	Car();
-	Car(Position pos, Animator* animator, int lane);
+	Hostile();
+	Hostile(Position pos, Animator* animator, int lane);
 
 	bool Behavior(int rate, Level& level);
-	bool isCar();
+	bool isHostile();
 };
 
 class Player : public Entity {

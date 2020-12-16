@@ -24,7 +24,7 @@ private:
 	Menu menu;
 public:
 	GameCore();
-	~GameCore() {};
+	~GameCore();
 
 	void DrawGame(); //Using graphic
 	void GameBehavior();

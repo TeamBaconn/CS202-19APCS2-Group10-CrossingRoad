@@ -19,3 +19,14 @@ vector<AnimatorData>& Menu::getList()
 {
 	return list;
 }
+
+void Menu::MenuChange(Option* op)
+{
+	if (option != nullptr) delete option;
+	option = op;
+}
+
+Menu::~Menu()
+{
+	if (option != nullptr) delete option;
+}

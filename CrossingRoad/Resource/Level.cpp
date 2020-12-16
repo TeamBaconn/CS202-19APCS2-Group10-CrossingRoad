@@ -53,7 +53,7 @@ LaneInfo& Level::getLane(int i) {
 
 void Level::ResetLane() {
 	for (int i = 0; i < entities.size(); ++i)
-		if (entities[i] != player && entities[i]->isCar()) entities[i]->remove = true;
+		if (entities[i] != player && entities[i]->isHostile()) entities[i]->remove = true;
 
 	width = LANE_WIDTH;
 	height = lane * LANE_HEIGHT;
@@ -123,12 +123,12 @@ void Level::spawnRandom()
 			Position p;
 			if (!SpawnArray[i].toRight) p = Position(INGAME_WIDTH + e->getWidth(), 0);
 			p = p + Position(0, (i + 1) * LANE_HEIGHT + LANE_HEIGHT*1/2+ (rand()%(LANE_HEIGHT*2/3)));
-			entities.push_back(new Car(p, e, i));
+			entities.push_back(new Hostile(p, e, i));
 		}
 	}
 }
 
-void Level::LooseGame()
+void Level::GameLose()
 {
 	if (lost) return;
 	lost = 1;
@@ -206,6 +206,14 @@ int Level::getScore() const
 {
 	return score;
 }
+void Level::setSoundName(string set)
+{
+	soundName = set;
+}
+void Level::setOtherSoundName(string set)
+{
+	otherSoundName = set;
+}
 void Level::writeE2File(ofstream& fout, Entity* entity) {
 	// animator
 	fout << entity->animator->name << '\n';
@@ -241,7 +249,7 @@ void Level::readF2E(ifstream& fin, Entity*& entity) {
 
 	int lane = (pos.y-1) / LANE_HEIGHT - 1;
 	if (id == HUMAN_ID) { entity = new Player(pos, temp); }
-	else if (id == CAR_ID) { entity = new Car(pos, temp, lane); }
+	else if (id == CAR_ID) { entity = new Hostile(pos, temp, lane); }
 	else if (id == PROP_ID) { entity = new Prop(pos, temp); }
 	else if (id == LIGHT_ID) { entity = new Light(pos, temp, lane); }
 

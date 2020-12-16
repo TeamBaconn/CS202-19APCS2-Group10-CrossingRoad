@@ -4,6 +4,10 @@ GameCore::GameCore() {
 	this->state = GameState::MENU;
 }
 
+GameCore::~GameCore()
+{
+}
+
 void GameCore::GameBehavior() {
 	while (1) {
 		Sleep(GAME_RATE);
@@ -21,7 +25,7 @@ void GameCore::GameBehavior() {
 				fin.close();
 			}
 
-			menu.ChangeMenu(new LostOption(level.score, highscore));
+			menu.MenuChange(new LostOption(level.score, highscore));
 			state = GameState::MENU;
 			level = Level();
 			continue;
@@ -57,14 +61,14 @@ void GameCore::HandleInput(int c) {
 		state = GameState::PLAYING;
 		break;
 	case LOAD_REQUEST:
-		menu.ChangeMenu(new LoadOption());
+		menu.MenuChange(new LoadOption());
 		break;
 	case BACK_MENU_REQUEST:
-		menu.ChangeMenu(new MenuOption());
+		menu.MenuChange(new MenuOption());
 		level = Level();
 		break;
 	case CREDIT_REQUEST:
-		menu.ChangeMenu(new CreditOption());
+		menu.MenuChange(new CreditOption());
 		break;
 	case RESUME_GAME:
 		state = GameState::PLAYING;
@@ -103,7 +107,7 @@ void GameCore::UserInput() {
 			break;
 		case ESC:
 			this->state = GameState::PAUSE;
-			menu.ChangeMenu(new PauseOption());
+			menu.MenuChange(new PauseOption());
 		}
 	}
 }

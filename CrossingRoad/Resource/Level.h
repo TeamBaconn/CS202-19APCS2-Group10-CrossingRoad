@@ -59,7 +59,7 @@ public:
 	void ResetLane();
 	void CheckEntity();
 	void spawnRandom();
-	void LooseGame();
+	void GameLose();
 	const Entity* getPlayer() const;
 	vector<Animator*> getAnimation(int type) const;
 
@@ -79,12 +79,8 @@ public:
 
 	int getHeight() const;
 	int getScore() const;
-	void setSoundName(string set) {
-		soundName = set;
-	}
-	void setOtherSoundName(string set) {
-		otherSoundName = set;
-	}
+	void setSoundName(string set);
+	void setOtherSoundName(string set);
 
 	friend class GameCore;
 };

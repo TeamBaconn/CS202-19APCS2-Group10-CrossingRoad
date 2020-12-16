@@ -32,6 +32,11 @@ Position Entity::Move(Position pos) {
 	return this->pos;
 }
 
+bool Entity::isHostile()
+{
+	return false;
+}
+
 void Entity::changeBase(int id) {
 	data.changeAnimation(id);
 }
@@ -59,13 +64,13 @@ Entity::Entity(Position pos, Animator * animator) {
 	this->data = AnimatorData(animator);
 }
 
-Car::Car() : Entity() {}
+Hostile::Hostile() : Entity() {}
 
-Car::Car(Position pos, Animator* animator, int lane) : Entity(pos, animator) {
+Hostile::Hostile(Position pos, Animator* animator, int lane) : Entity(pos, animator) {
 	this->lane = lane;
 }
 
-bool Car::Behavior(int rate, Level & level) {
+bool Hostile::Behavior(int rate, Level & level) {
 	Entity::Behavior(rate, level);
 	data.reverse = !level.getLane(lane).toRight;
 	if (level.getLane(lane).open) {
@@ -85,14 +90,14 @@ bool Car::Behavior(int rate, Level & level) {
 		&& level.getPlayer()->GetPosition().x <= firstHalf
 		&& botY>=level.getPlayer()->GetPosition().y
 		&& level.getPlayer()->GetPosition().y >= (botY + topY)/2) {
-		level.LooseGame();
+		level.GameLose();
 		remove = true;
 	}
 	if (!data.reverse) return pos.x - animator->getWidth() / 2 > LANE_WIDTH;
 	else return pos.x + animator->getWidth() / 2 < 0; 
 }
 
-bool Car::isCar()
+bool Hostile::isHostile()
 {
 	return true;
 }

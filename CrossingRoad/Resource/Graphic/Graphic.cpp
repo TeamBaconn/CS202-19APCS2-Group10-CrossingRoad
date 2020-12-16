@@ -60,6 +60,10 @@ Graphic::Graphic() {
 	HideCursor();
 }
 
+Graphic::~Graphic()
+{
+}
+
 void qSort(vector<Entity*>& values, int low, int high) {
 	if (low < high) {
 		int i = low - 1;

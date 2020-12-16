@@ -15,7 +15,7 @@ public:
 	//Constructor
 	Graphic();
 
-	~Graphic() {};
+	~Graphic();
 
 	void drawMenu(char** map, Menu& menu, const GameState& state);
 	char** getDrawableMap(const Level& level, const GameState& state);

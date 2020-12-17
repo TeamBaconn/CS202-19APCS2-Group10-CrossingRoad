@@ -1,5 +1,6 @@
 # Crossing Road
 ![Game_Menu_Footage](https://i.imgur.com/5mwzBxY.gif)
+
 Using custom graphic library to draw ASCII art animation and OOP knowledge learned from CS202 class, we've created a simple console game written entirely in C++. In this game, your mission is to guide these passengers through the crazy traffic without getting hit. 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://github.com/TeamBaconn/CS202-19APCS2-Group10-CrossingRoad)
 

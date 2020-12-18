@@ -16,7 +16,7 @@ Using custom graphic library to draw ASCII art animation and OOP knowledge learn
 - You can try out our game by cloning the project, extract **CrossingRoad/Resource/Build/Release.rar** and have fun.
 
 # Contributors
-![Game_Footage](https://imgur.com/DEAFmka)
+![Game_Footage](https://i.imgur.com/DEAFmka.png)
 
 # Gameplay / Screenshot
 ![Game_Footage](https://i.imgur.com/fteRuAK.gif)

@@ -125,7 +125,7 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 			for (int j = 0; j < width; j += LANE_DISTANCE) drawC(map, j - x, i*LANE_HEIGHT - y, '-', true); 
 			
 		for (int i = 0; i < entities.size(); i++) {
-			if (!entities[i]->canRender()) continue;
+			if (!entities[i]->canRender() || entities[i]->isRemoved()) continue;
 			Frame key = entities[i]->getAnimatorData().getFrame();
 			Position pos(entities[i]->GetPosition().x - key.key[0].length() / 2
 				, entities[i]->GetPosition().y - key.key.size());

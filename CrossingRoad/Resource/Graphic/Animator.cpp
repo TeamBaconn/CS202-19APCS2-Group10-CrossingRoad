@@ -36,7 +36,7 @@ void righttrim(Frame& fr) {
 	}
 	for (int j = 0; j < fr.key.size(); j++) {
 		if (!fr.key[j].empty() && fr.key[j].size() > maxtrim) {
-			fr.key[j].erase(maxtrim+1 , fr.key[j].size());
+			fr.key[j].erase(maxtrim + 1, fr.key[j].size());
 		}
 	}
 }
@@ -57,7 +57,7 @@ void ReplaceAll(string& c, char f, char t)
 	for (int i = 0; i < c.length(); i++) if (c[i] == f) c[i] = t;
 }
 
-Animator* readAnimator(string path,string sound, int id)
+Animator* readAnimator(string path, string sound, int id)
 {
 	ifstream info((string)ANIMATION + "/" + path);
 	if (!info.is_open()) return nullptr;
@@ -75,7 +75,7 @@ Animator* readAnimator(string path,string sound, int id)
 		if (k == "X") {
 			lefttrim(kc);
 			righttrim(kc);
-			rev =revFrame(kc);
+			rev = revFrame(kc);
 			frame.push_back(kc);
 			revframe.push_back(rev);
 			kc = *new Frame();
@@ -84,18 +84,18 @@ Animator* readAnimator(string path,string sound, int id)
 		}
 		kc.key.push_back(k);
 	}
-	return new Animator(path, frame, revframe, off_set_y, speed, id, set,sound);
+	return new Animator(path, frame, revframe, off_set_y, speed, id, set, sound);
 }
 
 Animator::Animator() = default;
 
 Animator::Animator(string name,
-	vector<Frame> & animation_set, 
+	vector<Frame> & animation_set,
 	vector<Frame> & animation_set_reverse,
-	int off_set_y, 
-	int speed, 
-	int id, 
-	int set,string sound)
+	int off_set_y,
+	int speed,
+	int id,
+	int set, string sound)
 {
 	this->name = name;
 	this->animation_set = animation_set;

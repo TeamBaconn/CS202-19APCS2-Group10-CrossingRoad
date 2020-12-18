@@ -28,8 +28,8 @@ class Entity {
 protected:
 	Position pos;
 	AnimatorData data;
-	bool remove = false;
 	bool render = true;
+	bool remove = false;
 public:
 	//Constructor
 	Entity();
@@ -48,6 +48,8 @@ public:
 	bool canRender() {
 		return render;
 	}
+
+	bool isRemoved() { return remove; }
 
 	virtual bool isHostile();
 

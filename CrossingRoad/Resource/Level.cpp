@@ -97,9 +97,8 @@ void Level::resetLevel() {
 	ResetLane();
 }
 void Level::DeleteEntity(int index) {
-	Entity* del = entities[index];
+	delete entities[index];
 	entities.erase(entities.begin() + index);
-	delete del;
 }
 void Level::CheckEntity()
 {
@@ -220,7 +219,9 @@ void Level::deleteMap(char**& old, int width)
 
 vector<Entity*> Level::getEntities() const
 {
-	return entities;
+	vector<Entity*> newEntities;
+	for (int i = 0; i < entities.size(); ++i) if (entities[i] && !entities[i]->remove) newEntities.push_back(entities[i]);
+	return newEntities;
 }
 
 int Level::getWidth() const

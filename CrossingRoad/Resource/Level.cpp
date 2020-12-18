@@ -75,9 +75,7 @@ void Level::ResetLane() {
 }
 void Level::KillAllEntities() {
 	int s = entities.size();
-	for (int i = s - 1; i >= 0; --i)
-		delete entities[i];
-	entities.clear();
+	for (int i = s - 1; i >= 0; --i) DeleteEntity(i);
 }
 void Level::resetLevel() {
 	//Default
@@ -98,7 +96,11 @@ void Level::resetLevel() {
 
 	ResetLane();
 }
-
+void Level::DeleteEntity(int index) {
+	Entity* del = entities[index];
+	entities.erase(entities.begin() + index);
+	delete del;
+}
 void Level::CheckEntity()
 {
 	for (int i = 0; i < entities.size(); i++)
@@ -127,12 +129,7 @@ void Level::CheckEntity()
 
 	//This code to remove entity
 	int s = entities.size();
-	for (int i = s - 1; i >= 0; --i) {
-		if (entities[i]->remove) {
-			delete entities[i];
-			entities.erase(entities.begin() + i);
-		}
-	}
+	for (int i = s - 1; i >= 0; --i) if (entities[i]->remove) DeleteEntity(i);
 	spawnRandom();
 }
 

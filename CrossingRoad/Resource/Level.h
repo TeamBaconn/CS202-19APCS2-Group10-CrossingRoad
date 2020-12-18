@@ -54,6 +54,8 @@ private:
 	int score = 0;
 	//Lane
 	vector<LaneInfo> SpawnArray;
+
+	void DeleteEntity(int index);
 public:
 	int getLane() const;
 	Level(int lane, int mode);

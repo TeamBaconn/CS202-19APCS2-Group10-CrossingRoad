@@ -55,7 +55,7 @@ void Level::PlaySoundEffect(string name)
 {
 	string path = (string)SOUND + name;
 	std::wstring stemp = std::wstring(path.begin(), path.end());
-	PlaySound(stemp.c_str(), NULL, SND_FILENAME | SND_ASYNC);
+	//PlaySound(stemp.c_str(), NULL, SND_FILENAME | SND_ASYNC);
 }
 
 void Level::ResetLane() {

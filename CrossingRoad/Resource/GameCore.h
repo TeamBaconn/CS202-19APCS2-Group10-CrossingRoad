@@ -34,18 +34,6 @@ public:
 	void Start();
 
 	friend class Graphic;
-	/*
-	void resetGame(); 
-	void exitGame(HANDLE);
-	void startGame(); 
-	void loadGame(istream);
-	void saveGame(istream); 
-	void pauseGame(HANDLE); 
-	void resumeGame(HANDLE); 
-	void updatePosPeople(char); 
-	void updatePosVehicle(); 
-	void updatePosAnimal();
-	*/
 };
 void FixConsoleWindow();
 void resizeConsole(int width, int height);

@@ -15,11 +15,11 @@
 #define CAM_LOCK_X true
 #define CAM_LOCK_Y false
 
-#define SCREEN_WIDTH 200
-#define SCREEN_HEIGHT 60
+#define SCREEN_WIDTH 211
+#define SCREEN_HEIGHT 50
 
 #define INGAME_WIDTH 120
-#define INGAME_HEIGHT 30
+#define INGAME_HEIGHT 50
 
 #define TRAFFIC_TIME 3000
 #define TRAFFIC_GAP 2000

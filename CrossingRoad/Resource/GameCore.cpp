@@ -143,14 +143,30 @@ void SetColor(int ForgC)
 	}
 	return;
 }
-void GameCore::DrawGame() {
-	char** old = nullptr;
-	while (1) {
-		char** map = graphic.getDrawableMap(level, state);
 
+void GameCore::DrawGame() {
+	HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
+	DWORD dwBytesWritten = 0;
+
+	SetConsoleActiveScreenBuffer(hConsole);
+
+	SetConsoleScreenBufferSize(hConsole, { SCREEN_WIDTH, SCREEN_HEIGHT });
+
+	char** old = nullptr;
+	char* screen = new char[SCREEN_WIDTH * SCREEN_HEIGHT + 1];
+	while (1) {
+
+		char** map = graphic.getDrawableMap(level, state);
+		
 		graphic.drawMenu(map, menu, state);
 
-		for (int i = 0; i < SCREEN_WIDTH; i++) {
+		for (int i = 0; i < SCREEN_HEIGHT; i++) for (int j = 0; j < SCREEN_WIDTH; j++) screen[i*SCREEN_WIDTH + j] = map[j][i];
+		screen[SCREEN_WIDTH * SCREEN_HEIGHT] = '\0';
+
+		WriteConsoleOutputCharacter(hConsole, (LPCSTR)screen, SCREEN_WIDTH * SCREEN_HEIGHT, {0,0}, &dwBytesWritten);
+		
+		Level::deleteMap(map, SCREEN_WIDTH);
+		/*for (int i = 0; i < SCREEN_WIDTH; i++) {
 			for (int j = 0; j < SCREEN_HEIGHT; j++) {
 				if (old != nullptr) {
 					if (old[i][j] == map[i][j]) continue;
@@ -173,6 +189,6 @@ void GameCore::DrawGame() {
 		}
 		//Delete old map
 		Level::deleteMap(old, SCREEN_WIDTH);
-		old = map;
+		old = map;*/
 	}
 }

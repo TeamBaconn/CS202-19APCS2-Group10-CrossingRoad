@@ -1,4 +1,5 @@
 #include "GameCore.h"
+#include <cassert>
 
 GameCore::GameCore() {
 	this->state = GameState::MENU;
@@ -17,15 +18,7 @@ void GameCore::GameBehavior() {
 		if (level.lost > LOST_DELAY) {
 			//Return to menu
 
-			ifstream fin("./Resource/Data/highscore.txt");
-			int highscore = level.score;
-			if (fin) {
-				fin >> highscore >> highscore;
-				highscore = highscore > level.score ? highscore : level.score;
-				fin.close();
-			}
-
-			menu.MenuChange(new LostOption(level.score, highscore));
+			menu.MenuChange(new LostOption(level.score, level.highscore));
 			state = GameState::MENU;
 			level.resetLevel();
 			continue;
@@ -130,65 +123,51 @@ void GameCore::Start() {
 	t2.join();
 	t3.join();
 }
-void SetColor(int ForgC)
+void set_console_size(HANDLE& screen_buffer, SHORT width, SHORT height)
 {
-	WORD wColor;
-	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	assert(screen_buffer != NULL);
+	assert(width > 0);
+	assert(height > 0);
 
-	if (GetConsoleScreenBufferInfo(hStdOut, &csbi))
-	{
-		wColor = (csbi.wAttributes & 0xF0) + (ForgC & 0x0F);
-		SetConsoleTextAttribute(hStdOut, wColor);
-	}
-	return;
+	COORD const size = { width, height };
+	BOOL success;
+
+	SMALL_RECT const minimal_window = { 0, 0, 1, 1 };
+	success = SetConsoleWindowInfo(screen_buffer, TRUE, &minimal_window);
+
+	success = SetConsoleScreenBufferSize(screen_buffer, size);
+
+	SMALL_RECT const window = { 0, 0, size.X - 1, size.Y - 1 };
+	success = SetConsoleWindowInfo(screen_buffer, TRUE, &window);
 }
-
 void GameCore::DrawGame() {
+	//Setup window
 	HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
 	DWORD dwBytesWritten = 0;
 
+	set_console_size(hConsole, SCREEN_WIDTH, SCREEN_HEIGHT);
 	SetConsoleActiveScreenBuffer(hConsole);
 
-	SetConsoleScreenBufferSize(hConsole, { SCREEN_WIDTH, SCREEN_HEIGHT });
+	SetConsoleTitle("Crossing Road | CS202");
+	WORD* screen_color = new WORD[SCREEN_WIDTH * SCREEN_HEIGHT];
+	char* screen = new char[SCREEN_WIDTH * SCREEN_HEIGHT];
 
-	char** old = nullptr;
-	char* screen = new char[SCREEN_WIDTH * SCREEN_HEIGHT + 1];
 	while (1) {
 
 		char** map = graphic.getDrawableMap(level, state);
 		
 		graphic.drawMenu(map, menu, state);
 
-		for (int i = 0; i < SCREEN_HEIGHT; i++) for (int j = 0; j < SCREEN_WIDTH; j++) screen[i*SCREEN_WIDTH + j] = map[j][i];
-		screen[SCREEN_WIDTH * SCREEN_HEIGHT] = '\0';
-
-		WriteConsoleOutputCharacter(hConsole, (LPCSTR)screen, SCREEN_WIDTH * SCREEN_HEIGHT, {0,0}, &dwBytesWritten);
-		
-		Level::deleteMap(map, SCREEN_WIDTH);
-		/*for (int i = 0; i < SCREEN_WIDTH; i++) {
-			for (int j = 0; j < SCREEN_HEIGHT; j++) {
-				if (old != nullptr) {
-					if (old[i][j] == map[i][j]) continue;
-				}
-				else if (map[i][j] == ' ') continue;
-				GotoXY(i, j);
-				if (map[i][j] == 'G' && state == GameState::PLAYING) {
-					SetColor(10);
-					putchar((char)220);
-				}
-				else if (map[i][j] == 'R' && state == GameState::PLAYING) {
-					SetColor(4);
-					putchar((char)220);
-				}
-				else {
-					SetColor(15);
-					putchar(map[i][j]);
-				}
+		for (int i = 0; i < SCREEN_HEIGHT; i++) for (int j = 0; j < SCREEN_WIDTH; j++) {
+			screen[i * SCREEN_WIDTH + j] = map[j][i];
+			if (state == GameState::PLAYING && (map[j][i] == 'G' || map[j][i] == 'R')) {
+				screen[i * SCREEN_WIDTH + j] = ' ';
+				screen_color[i * SCREEN_WIDTH + j] = map[j][i] == 'G' ? BACKGROUND_GREEN: BACKGROUND_RED;
 			}
+			else screen_color[i * SCREEN_WIDTH + j] = 7;
 		}
-		//Delete old map
-		Level::deleteMap(old, SCREEN_WIDTH);
-		old = map;*/
+		WriteConsoleOutputCharacter(hConsole, (LPCSTR)	screen, SCREEN_WIDTH * SCREEN_HEIGHT, {0,0}, &dwBytesWritten);
+		WriteConsoleOutputAttribute(hConsole, screen_color, SCREEN_WIDTH * SCREEN_HEIGHT, { 0,0 }, &dwBytesWritten);
+		Level::deleteMap(map, SCREEN_WIDTH);
 	}
 }

@@ -129,34 +129,9 @@ LostOption::LostOption(int currentScore, int highScore)
 
 void LostOption::saveHighScore(int score)
 {
-	ifstream fin("./Resource/Data/highscore.txt");
-	if (fin) {
-		int count;
-		fin >> count;
-		vector<int> scores;
-		int s;
-		for (int i = 0; i < count; ++i) {
-			fin >> s;
-			scores.push_back(s);
-		}
-		scores.push_back(score);
-		sort(scores.begin(), scores.end(), [](int a, int b) {return (a > b); });
-
-		fin.close();
-		ofstream fout("./Resource/Data/highscore.txt");
-
-		count = count + 1 > 9 ? 9 : count + 1;
-		fout << count << '\n';
-		for (int i = 0; i < count; ++i) {
-			fout << scores[i] << '\n';
-		}
-		fout.close();
-	}
-	else {
-		ofstream fout("./Resource/Data/highscore.txt");
-		fout << 1 << '\n';
-		fout << score;
-	}
+	ofstream fout("./Resource/Data/highscore.txt");
+	fout << score;
+	fout.close();
 }
 
 OptionRequest LostOption::Select(int key)

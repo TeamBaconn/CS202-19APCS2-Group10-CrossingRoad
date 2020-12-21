@@ -9,9 +9,8 @@
 
 using namespace std;
 class Graphic {
-private:
-
 public:
+	HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
 	//Constructor
 	Graphic();
 
@@ -20,5 +19,4 @@ public:
 	void drawMenu(char** map, Menu& menu, const GameState& state);
 	char** getDrawableMap(const Level& level, const GameState& state);
 };
-void GotoXY(int x, int y);
 #endif // GRAPHIC_H_INCLUDED

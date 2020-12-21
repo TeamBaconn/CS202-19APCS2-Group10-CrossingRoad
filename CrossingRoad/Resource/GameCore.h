@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <thread>
 #include <windows.h>
-#include <mmsystem.h>
+
 #pragma comment(lib,"Winmm.lib")
 using namespace std;
 

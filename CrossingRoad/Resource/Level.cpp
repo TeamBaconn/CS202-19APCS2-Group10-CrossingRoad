@@ -94,7 +94,17 @@ void Level::resetLevel() {
 	Animator* house = getAnimator("house.txt");
 	entities.push_back(new Prop(Position(house->getWidth() / 2, 5), house));
 
+	ifstream fin("./Resource/Data/highscore.txt");
+
+	if (fin) {
+		fin >> highscore;
+		fin.close();
+	}
+
 	ResetLane();
+}
+int Level::getHighScore() const{
+	return highscore;
 }
 void Level::DeleteEntity(int index) {
 	delete entities[index];
@@ -125,7 +135,8 @@ void Level::CheckEntity()
 				++checkPoint;
 			}
 		}
-
+	//check score
+	highscore = highscore > score ? highscore : score;
 	//This code to remove entity
 	int s = entities.size();
 	for (int i = s - 1; i >= 0; --i) if (entities[i]->remove) DeleteEntity(i);

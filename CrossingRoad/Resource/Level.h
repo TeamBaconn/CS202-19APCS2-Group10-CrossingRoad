@@ -15,7 +15,7 @@
 #define CAM_LOCK_X true
 #define CAM_LOCK_Y false
 
-#define SCREEN_WIDTH 211
+#define SCREEN_WIDTH 200
 #define SCREEN_HEIGHT 50
 
 #define INGAME_WIDTH 120
@@ -52,6 +52,7 @@ private:
 	int lost = 0;
 	int checkPoint = 1;
 	int score = 0;
+	int highscore;
 	//Lane
 	vector<LaneInfo> SpawnArray;
 
@@ -86,6 +87,7 @@ public:
 
 	int getHeight() const;
 	int getScore() const;
+	int getHighScore() const;
 	bool isLost() {
 		return lost;
 	}

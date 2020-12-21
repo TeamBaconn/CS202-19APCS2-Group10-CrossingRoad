@@ -30,12 +30,6 @@ void HideCursor()
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorInfo(handle, &cursor);
 }
-void GotoXY(int x, int y) {
-	COORD coord;
-	coord.X = x;
-	coord.Y = y;
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-}
 
 int DrawString(char** map, const string& c, int x, int y, int dx) {
 	int rx = 0;
@@ -53,9 +47,6 @@ int DrawString(char** map, const string& c, int x, int y, int dx) {
 
 //Constructor
 Graphic::Graphic() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
 	FixConsoleWindow();
 	HideCursor();
 }
@@ -113,7 +104,10 @@ char** Graphic::getDrawableMap(const Level& level, const GameState& state) {
 		int width = level.getWidth(), height = level.getHeight();
 
 		string score = "Score: "+to_string(level.getScore());
-		DrawString(map, score, INGAME_WIDTH + 5, 6, 20);
+		string highscore = "Highscore: " + to_string(level.getHighScore());
+		DrawString(map, score, INGAME_WIDTH + 5, 30, 20);
+		DrawString(map, highscore, INGAME_WIDTH + 5, 32, 20);
+		DrawString(map, "Press ESC key to pause game", INGAME_WIDTH + 5, 34, 30);
 		//Sort entities
 		vector<Entity*> entities = level.getEntities();
 		qSort(entities, 0, entities.size() - 1);
